@@ -1,65 +1,30 @@
 import React from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Facebook, Instagram, Twitter } from 'lucide-react';
-import { Pinterest } from "../Icons";
+import { Instagram } from "lucide-react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-black text-white">
-      {/* Email Signup Strip */}
-      <div className="border-b border-neutral-800">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-12 md:py-16">
-          <div className="max-w-md mx-auto text-center">
-            <h2 className="text-sm uppercase tracking-[0.2em] font-medium mb-2">
-              Join The Community
-            </h2>
-            <p className="text-neutral-400 text-xs mb-6">
-              Sign up for email updates and exclusive offers.
-            </p>
-            <div className="flex">
-              <Input
-                type="email"
-                placeholder="Email Address"
-                className="bg-transparent border-neutral-600 text-white placeholder:text-neutral-500 text-sm focus:border-white rounded-none flex-1"
-              />
-              <Button className="bg-white text-black hover:bg-neutral-200 rounded-none px-6 text-xs uppercase tracking-[0.15em] font-medium">
-                Sign Up
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <footer className="w-full bg-white border-t border-neutral-200">
       {/* Main Footer Content */}
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Contact */}
-          <div className="space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.2em] font-medium">Contact</h3>
-            <div className="space-y-2">
-              <p className="text-sm text-neutral-400">+91 9220726885</p>
-              <p className="text-xs text-neutral-500">Mon - Sat (9 AM - 6 PM)</p>
-              <p className="text-sm text-neutral-400 mt-3">support@pamara.co.in</p>
-              <p className="text-xs text-neutral-500">24/7 Email Support</p>
-            </div>
-          </div>
-
-          {/* About */}
-          <div className="space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.2em] font-medium">About</h3>
-            <ul className="space-y-2">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-14 md:py-20">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 lg:gap-8">
+          {/* Help */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-6">Help</h3>
+            <ul className="space-y-3">
               {[
-                { name: "About Us", href: "/about" },
-                { name: "Help & FAQ", href: "/help-faq" },
+                { name: "FAQs", href: "/help-faq" },
+                { name: "Returns and Exchanges", href: "/cancellation-returns-exchanges" },
+                { name: "Contact Us", href: "/about" },
+                { name: "Terms of Service", href: "/terms-of-use" },
                 { name: "Size Guide", href: "/size-guide" },
-                { name: "Returns & Exchanges", href: "/cancellation-returns-exchanges" },
+                { name: "Shipping Policy", href: "/shipping-policy" },
+                { name: "Privacy Policy", href: "/privacy-policy" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-neutral-400 hover:text-white transition-colors"
+                    className="text-sm text-neutral-500 hover:text-black transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -68,59 +33,132 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Social */}
-          <div className="space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.2em] font-medium">Follow Us</h3>
-            <div className="flex gap-4">
+          {/* Shop With Us */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-6">Shop With Us</h3>
+            <ul className="space-y-3">
               {[
-                { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/pamara.co.in/" },
-                { name: "Facebook", icon: Facebook, href: "https://www.facebook.com/profile.php?id=61570335279475" },
-                { name: "X", icon: Twitter, href: "https://x.com/ClothingPamara" },
-                { name: "Pinterest", icon: Pinterest, href: "https://www.pinterest.com/pamaraofficial/" },
-              ].map((social) => (
-                <Link
-                  key={social.name}
-                  href={social.href}
-                  className="text-neutral-500 hover:text-white transition-colors"
-                >
-                  <social.icon className="w-4 h-4" />
-                  <span className="sr-only">{social.name}</span>
-                </Link>
+                { name: "Search", href: "/search" },
+                { name: "All Products", href: "/collections/all-products" },
+                { name: "T-Shirts", href: "/collections/t-shirts" },
+                { name: "Hoodies", href: "/collections/hoodies" },
+                { name: "Joggers", href: "/collections/joggers" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-neutral-500 hover:text-black transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* Payment */}
-          <div className="space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.2em] font-medium">Payment Methods</h3>
-            <div className="flex gap-3">
-              {["/upi.jpeg", "/master.jpeg", "/netbanking.jpeg", "/visa.png"].map((payment) => (
-                <div
-                  key={payment}
-                  className="w-10 h-7 bg-white p-1 flex items-center justify-center"
-                >
-                  <img src={payment} alt="payment" className="w-full h-full object-contain" />
-                </div>
+          {/* Explore */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-6">Explore</h3>
+            <ul className="space-y-3">
+              {[
+                { name: "Our Story", href: "/about" },
+                { name: "Account", href: "/api/auth/login" },
+                { name: "My Orders", href: "/my-orders" },
+                { name: "Wishlist", href: "/wishlist" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-neutral-500 hover:text-black transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Join the PAMARA Family — newsletter */}
+          <div className="col-span-2">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-6">
+              Join the PAMARA Family
+            </h3>
+            <p className="text-sm text-neutral-500 leading-relaxed mb-6 max-w-sm">
+              Instantly receive updates, access to exclusive deals, product launch details,
+              and more.
+            </p>
+            <div className="max-w-sm">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className="w-full border border-neutral-300 px-4 py-3 text-sm placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors mb-3"
+              />
+              <button className="w-full bg-black text-white text-xs uppercase tracking-[0.2em] font-semibold py-3.5 hover:bg-neutral-800 transition-colors">
+                Subscribe
+              </button>
+            </div>
+
+            {/* About the Shop */}
+            <div className="mt-10">
+              <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-4">
+                About the Shop
+              </h3>
+              <p className="text-sm text-neutral-500 leading-relaxed max-w-sm">
+                PAMARA is a lifestyle clothing brand. From start to finish, each product
+                is designed with our customers and quality in mind. Our goal is to make
+                unique and special products that our customers can wear with pride.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-neutral-800">
+      <div className="border-t border-neutral-200">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-2">
-            <p className="text-xs text-neutral-500">
-              &copy; {new Date().getFullYear()} PAMARA. All rights reserved.
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            {/* Social Icons */}
+            <div className="flex items-center gap-4">
+              <Link
+                href="https://www.instagram.com/pamara.co.in/"
+                className="text-neutral-400 hover:text-black transition-colors"
+                target="_blank"
+              >
+                <Instagram className="w-5 h-5" strokeWidth={1.5} />
+              </Link>
+              {/* TikTok SVG */}
+              <Link
+                href="https://www.facebook.com/profile.php?id=61570335279475"
+                className="text-neutral-400 hover:text-black transition-colors"
+                target="_blank"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Copyright */}
+            <p className="text-xs text-neutral-400">
+              &copy; {new Date().getFullYear()} &mdash; PAMARA
             </p>
-            <div className="flex gap-4">
-              <Link href="/privacy-policy" className="text-xs text-neutral-500 hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms-of-use" className="text-xs text-neutral-500 hover:text-white transition-colors">
-                Terms of Use
-              </Link>
+
+            {/* Payment methods */}
+            <div className="flex items-center gap-2">
+              {["/upi.jpeg", "/master.jpeg", "/netbanking.jpeg", "/visa.png"].map(
+                (payment) => (
+                  <div
+                    key={payment}
+                    className="w-10 h-7 border border-neutral-200 bg-white p-1 flex items-center justify-center"
+                  >
+                    <img
+                      src={payment}
+                      alt="payment"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>

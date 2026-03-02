@@ -157,7 +157,7 @@ export default async function Page() {
     await getAllData();
 
   return (
-    <div className="-mt-24">
+    <div className="-mt-[136px]">
       <Hero data={mainPageContent ?? defaultData} />
 
       {/* FOR HIM / FOR HER Tabs */}

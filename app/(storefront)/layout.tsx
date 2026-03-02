@@ -10,7 +10,7 @@ export default function StoreFrontLayout({
   return (
     <>
       <Navbar />
-      <main className="min-h-screen pt-24">{children}</main>
+      <main className="min-h-screen pt-[136px] md:pt-[136px]">{children}</main>
       <Footer />
     </>
   );

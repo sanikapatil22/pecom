@@ -278,7 +278,7 @@ export default function ProductDetails({ data }: iAppProps) {
         {/* Left: Images */}
         <div className="space-y-3">
           {/* Main Image */}
-          <div className="relative aspect-[3/4] bg-neutral-100 overflow-hidden">
+          <div className="relative w-full bg-neutral-100 overflow-hidden" style={{ paddingTop: "100%" }}>
             <Image
               src={data.images[currentImageIndex]}
               alt={data.name}
@@ -335,34 +335,22 @@ export default function ProductDetails({ data }: iAppProps) {
         {/* Right: Product Info */}
         <div className="lg:py-4">
           {/* Title & Price */}
-          <div className="space-y-4">
-            {data.isBestSeller && (
-              <span className="inline-block text-[10px] uppercase tracking-[0.15em] font-medium bg-black text-white px-3 py-1">
-                Best Seller
-              </span>
-            )}
-            <h1 className="text-2xl md:text-3xl font-medium uppercase tracking-[0.05em]">
+          <div className="space-y-3">
+            <h1 className="text-xl md:text-2xl font-medium uppercase tracking-[0.15em]">
               {data.name}
             </h1>
-            <p className="text-sm text-neutral-500">{data.headline}</p>
-
-            <div className="flex items-baseline gap-3">
-              <span className="text-xl font-medium">
-                {formatPrice(data.finalPrice)}
-              </span>
+            <p className="text-base text-neutral-500 tracking-[0.1em]">
+              {formatPrice(data.finalPrice)}
               {discount > 0 && (
                 <>
-                  <span className="text-base text-neutral-400 line-through">
+                  <span className="text-sm text-neutral-400 line-through ml-3">
                     {formatPrice(data.originalPrice)}
                   </span>
-                  <span className="text-xs uppercase tracking-wider text-neutral-500">
+                  <span className="text-sm text-neutral-400 ml-2">
                     {discount}% off
                   </span>
                 </>
               )}
-            </div>
-            <p className="text-xs text-neutral-400 uppercase tracking-wider">
-              Inclusive of all taxes
             </p>
           </div>
 
@@ -371,17 +359,13 @@ export default function ProductDetails({ data }: iAppProps) {
 
           {/* Color Selection */}
           <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <h3 className="text-xs uppercase tracking-[0.15em] font-medium">
-                Color
-              </h3>
-              {selectedColor && (
-                <span className="text-xs text-neutral-400 uppercase tracking-wider">
-                  {selectedColor.replace(/_/g, " ")}
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
+            <p className="text-sm">
+              <span className="text-neutral-500">Color:</span>{" "}
+              <span className="font-medium">
+                {selectedColor ? selectedColor.replace(/_/g, " ") : ""}
+              </span>
+            </p>
+            <div className="flex items-center gap-2.5">
               {Array.from(
                 new Set(data.variants.map((variant) => variant.color))
               ).map((color, index) => {
@@ -392,52 +376,25 @@ export default function ProductDetails({ data }: iAppProps) {
                     );
 
                 return (
-                  <TooltipProvider key={index}>
-                    <Tooltip delayDuration={100}>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={() => setSelectedColor(color)}
-                          disabled={!isAvailable}
-                          className={cn(
-                            "w-7 h-7 border transition-all duration-200",
-                            selectedColor === color
-                              ? "ring-1 ring-black ring-offset-2"
-                              : "hover:scale-110",
-                            !isAvailable &&
-                              "opacity-30 cursor-not-allowed hover:scale-100",
-                            [
-                              "WHITE",
-                              "BEIGE",
-                              "LIGHT_GREEN",
-                              "SKY_BLUE",
-                              "KHAKI",
-                            ].includes(color) && "border-neutral-300"
-                          )}
-                          style={{
-                            background:
-                              color === "MULTICOLOR"
-                                ? colorMap[color]
-                                : colorMap[color] || color.toLowerCase(),
-                            borderColor: [
-                              "WHITE",
-                              "BEIGE",
-                              "LIGHT_GREEN",
-                              "SKY_BLUE",
-                              "KHAKI",
-                            ].includes(color)
-                              ? "#d4d4d4"
-                              : colorMap[color] || color.toLowerCase(),
-                          }}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent className="bg-white px-3 py-1.5 text-xs border">
-                        <p>
-                          {color.replace(/_/g, " ")}
-                          {!isAvailable && " (Unavailable)"}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <button
+                    key={index}
+                    onClick={() => setSelectedColor(color)}
+                    disabled={!isAvailable}
+                    className={cn(
+                      "w-9 h-9 border-2 transition-all duration-200",
+                      selectedColor === color
+                        ? "border-black scale-105"
+                        : "border-neutral-200 hover:border-neutral-400",
+                      !isAvailable && "opacity-30 cursor-not-allowed"
+                    )}
+                    style={{
+                      background:
+                        color === "MULTICOLOR"
+                          ? colorMap[color]
+                          : colorMap[color] || color.toLowerCase(),
+                    }}
+                    title={color.replace(/_/g, " ")}
+                  />
                 );
               })}
             </div>
@@ -446,22 +403,29 @@ export default function ProductDetails({ data }: iAppProps) {
           {/* Size Selection */}
           <div className="space-y-3 mt-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs uppercase tracking-[0.15em] font-medium">
-                Size
-              </h3>
+              <p className="text-sm">
+                <span className="text-neutral-500">Size:</span>
+              </p>
               <SizeChartDialog type={data.category} />
             </div>
-            <div className="grid grid-cols-6 gap-2">
+            <div className="flex flex-wrap gap-2">
               {ALL_SIZES.map((size) => {
-                const stock = getStockForSize(size);
                 const available = isSizeAvailable(size);
+                const sizeLabels: Record<string, string> = {
+                  XS: "XSmall",
+                  S: "Small",
+                  M: "Medium",
+                  L: "Large",
+                  XL: "XLarge",
+                  XXL: "XXLarge",
+                };
                 return (
                   <button
                     key={size}
                     onClick={() => handleSizeSelect(size)}
                     disabled={!available}
                     className={cn(
-                      "h-11 text-sm font-medium border transition-all duration-200",
+                      "h-10 px-5 text-sm border transition-all duration-200",
                       selectedSize === size
                         ? "bg-black text-white border-black"
                         : available
@@ -469,7 +433,7 @@ export default function ProductDetails({ data }: iAppProps) {
                         : "border-neutral-200 text-neutral-300 cursor-not-allowed line-through"
                     )}
                   >
-                    {size}
+                    {sizeLabels[size]}
                   </button>
                 );
               })}
@@ -483,171 +447,126 @@ export default function ProductDetails({ data }: iAppProps) {
 
           {/* Action Buttons */}
           <div className="space-y-3 mt-8">
+            {/* ADD TO CART — outlined */}
             <form action={addProducttoShoppingCart} className="w-full">
               <button
-                className="w-full h-12 bg-black text-white text-sm uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full h-12 border border-black text-black text-sm uppercase tracking-[0.2em] font-medium hover:bg-black hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled={!selectedSize || !selectedColor || addingToBag}
                 type="submit"
               >
                 {addingToBag ? (
-                  <BeatLoader size={8} color="#fff" />
+                  <BeatLoader size={8} color="#000" />
                 ) : (
-                  "Add to Bag"
+                  "Add to Cart"
                 )}
               </button>
             </form>
 
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                disabled={isLoading}
-                className="h-11 border border-black text-sm uppercase tracking-[0.1em] font-medium hover:bg-black hover:text-white transition-colors disabled:opacity-40"
-                onClick={() => handleBuyNow()}
-              >
-                {isLoading ? (
-                  <Loader2 className="animate-spin mx-auto w-4 h-4" />
-                ) : (
-                  "Buy Now"
-                )}
-              </button>
-              <button
-                className="h-11 border border-neutral-300 text-sm uppercase tracking-[0.1em] font-medium hover:border-black transition-colors flex items-center justify-center gap-2"
-                onClick={handleAddToWishlist}
-              >
-                <Heart
-                  className={cn(
-                    "w-4 h-4",
-                    isLiked && "fill-black text-black"
-                  )}
-                  strokeWidth={1.5}
-                />
-                {isLiked ? "Saved" : "Save"}
-              </button>
-            </div>
-          </div>
+            {/* BUY NOW — filled */}
+            <button
+              disabled={isLoading}
+              className="w-full h-12 bg-black text-white text-sm uppercase tracking-[0.2em] font-medium hover:bg-neutral-800 transition-colors disabled:opacity-40"
+              onClick={() => handleBuyNow()}
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin mx-auto w-4 h-4" />
+              ) : (
+                "Buy Now"
+              )}
+            </button>
 
-          {/* Features Strip */}
-          <div className="grid grid-cols-3 gap-4 mt-8 py-6 border-t border-b border-neutral-200">
-            <div className="text-center">
-              <Truck className="w-4 h-4 mx-auto mb-1.5" strokeWidth={1.5} />
-              <p className="text-[10px] uppercase tracking-[0.1em] text-neutral-500">
-                Free Shipping
-              </p>
-            </div>
-            <div className="text-center">
-              <Shield className="w-4 h-4 mx-auto mb-1.5" strokeWidth={1.5} />
-              <p className="text-[10px] uppercase tracking-[0.1em] text-neutral-500">
-                Secure Payment
-              </p>
-            </div>
-            <div className="text-center">
-              <RefreshCw
-                className="w-4 h-4 mx-auto mb-1.5"
+            {/* Save / Wishlist */}
+            <button
+              className="w-full h-10 text-sm text-neutral-500 hover:text-black transition-colors flex items-center justify-center gap-2"
+              onClick={handleAddToWishlist}
+            >
+              <Heart
+                className={cn(
+                  "w-4 h-4",
+                  isLiked && "fill-black text-black"
+                )}
                 strokeWidth={1.5}
               />
-              <p className="text-[10px] uppercase tracking-[0.1em] text-neutral-500">
-                Easy Returns
+              {isLiked ? "Saved to Wishlist" : "Add to Wishlist"}
+            </button>
+          </div>
+
+          {/* Inline Specs */}
+          <div className="mt-8 space-y-3 border-t border-neutral-200 pt-6">
+            {[
+              { label: "MATERIAL", value: data.material },
+              { label: "FIT", value: data.fitType },
+              { label: "PATTERN", value: data.pattern },
+              { label: "SLEEVE", value: data.sleeveType },
+              { label: "COLLAR", value: data.collarStyle },
+            ].filter(({ value }) => value).map(({ label, value }) => (
+              <p key={label} className="text-sm">
+                <span className="font-semibold">{label}:</span>{" "}
+                <span className="text-neutral-600">{value}</span>
               </p>
+            ))}
+          </div>
+
+          {/* Description */}
+          <div className="mt-6 border-t border-neutral-200 pt-6">
+            <p className="text-sm font-semibold mb-2">DESCRIPTION:</p>
+            <div className="text-sm text-neutral-600 leading-relaxed space-y-2">
+              {data.description.split("•").map((part, index) => (
+                <p key={index} className="break-words">
+                  {index !== 0 && "• "}
+                  {part.trim()}
+                </p>
+              ))}
             </div>
           </div>
 
-          {/* Accordion Sections */}
-          <div className="mt-6 space-y-0">
-            {/* Description */}
-            <div className="border-b border-neutral-200">
-              <button
-                onClick={() => toggleSection("description")}
-                className="w-full flex items-center justify-between py-4"
-              >
-                <span className="text-xs uppercase tracking-[0.15em] font-medium">
-                  Description
-                </span>
-                {expandedSection === "description" ? (
-                  <Minus className="w-4 h-4" />
-                ) : (
-                  <Plus className="w-4 h-4" />
-                )}
-              </button>
-              {expandedSection === "description" && (
-                <div className="pb-4 text-sm text-neutral-600 leading-relaxed space-y-2">
-                  {data.description.split("•").map((part, index) => (
-                    <p key={index} className="break-words">
-                      {index !== 0 && "• "}
-                      {part.trim()}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Specifications */}
-            <div className="border-b border-neutral-200">
-              <button
-                onClick={() => toggleSection("specs")}
-                className="w-full flex items-center justify-between py-4"
-              >
-                <span className="text-xs uppercase tracking-[0.15em] font-medium">
-                  Specifications
-                </span>
-                {expandedSection === "specs" ? (
-                  <Minus className="w-4 h-4" />
-                ) : (
-                  <Plus className="w-4 h-4" />
-                )}
-              </button>
-              {expandedSection === "specs" && (
-                <div className="pb-4 space-y-3">
-                  {[
-                    { label: "Material", value: data.material },
-                    { label: "Pattern", value: data.pattern },
-                    { label: "Fit Type", value: data.fitType },
-                    { label: "Sleeve", value: data.sleeveType },
-                    { label: "Collar", value: data.collarStyle },
-                    {
-                      label: "Country of Origin",
-                      value: data.countryOfOrigin,
-                    },
-                    { label: "Manufacturer", value: data.manufacturer },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="flex justify-between text-sm">
-                      <span className="text-neutral-400">{label}</span>
-                      <span className="font-medium">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Comfort Features */}
-            {data.comfortFeatures.length > 0 && (
-              <div className="border-b border-neutral-200">
-                <button
-                  onClick={() => toggleSection("comfort")}
-                  className="w-full flex items-center justify-between py-4"
-                >
-                  <span className="text-xs uppercase tracking-[0.15em] font-medium">
-                    Comfort Features
-                  </span>
-                  {expandedSection === "comfort" ? (
-                    <Minus className="w-4 h-4" />
-                  ) : (
-                    <Plus className="w-4 h-4" />
-                  )}
-                </button>
-                {expandedSection === "comfort" && (
-                  <div className="pb-4 flex flex-wrap gap-2">
-                    {data.comfortFeatures.map((feature, index) => (
-                      <span
-                        key={index}
-                        className="text-xs uppercase tracking-wider border border-neutral-200 px-3 py-1.5"
-                      >
-                        {feature}
-                      </span>
+          {/* Size Chart */}
+          <div className="mt-6 border-t border-neutral-200 pt-6">
+            <p className="text-sm font-semibold mb-4">SIZE CHART (inches)</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b-2 border-neutral-300">
+                    <th className="text-left py-2 pr-4 font-semibold text-neutral-500 w-24"></th>
+                    {["S", "M", "L", "XL", "XXL"].map((s) => (
+                      <th key={s} className="py-2 px-4 font-bold text-center">{s}</th>
                     ))}
-                  </div>
-                )}
-              </div>
-            )}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-neutral-100">
+                    <td className="py-3 pr-4 font-bold">Length</td>
+                    {["26.5", "27.5", "28.5", "29.5", "30.5"].map((v) => (
+                      <td key={v} className="py-3 px-4 text-center text-neutral-600">{v}</td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-bold">Chest</td>
+                    {["9", "10", "11", "12", "13"].map((v) => (
+                      <td key={v} className="py-3 px-4 text-center text-neutral-600">{v}</td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          {/* Comfort Features */}
+          {data.comfortFeatures.length > 0 && (
+            <div className="mt-6 border-t border-neutral-200 pt-6">
+              <p className="text-sm font-semibold mb-3">COMFORT FEATURES:</p>
+              <div className="flex flex-wrap gap-2">
+                {data.comfortFeatures.map((feature, index) => (
+                  <span
+                    key={index}
+                    className="text-xs uppercase tracking-wider border border-neutral-200 px-3 py-1.5"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Reviews */}
           <div className="mt-8">
