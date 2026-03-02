@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW 2021 (64-Bit) -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="330.368mm" height="235.762mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 33035.68 23575.41"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <font id="FontID0" horiz-adv-x="708" font-variant="normal" style="fill-rule:nonzero" font-style="normal" font-weight="400">
+	<font-face 
+		font-family="Logirent Demo">
+		<font-face-src>
+			<font-face-name name="LogirentDemo"/>
+		</font-face-src>
+	</font-face>
+   <missing-glyph><path d="M0 0z"/></missing-glyph>
+   <glyph unicode="a" horiz-adv-x="708" d="M27.0021 0l117 0 202.999 611 6.00047 0 216.997 -611 125.002 0 -268.001 698.002 -154.002 0 -245.997 -698.002z"/>
+   <glyph unicode="m" horiz-adv-x="892" d="M408 94.9999l76.9985 0 231 414.001 3.00024 -509.001 107.001 0 0 698.002 -114.998 0 -258.002 -482.003 -256 482.003 -102.998 0 313.999 -603.002zm-325.001 -94.9999l103.002 0 0 266.998 -103.002 198.002 0 -465z"/>
+   <glyph unicode="p" horiz-adv-x="613" d="M82.999 0l107.999 0 0 247 159.003 0c147.997,0 244,79.9987 244,231.999 0,156.003 -94.0013,219.004 -244,219.004l-267.003 0 0 -92.0042 243.001 0c82.999,0 152.998,-27.9962 152.998,-130.998 0,-98.0001 -69.9995,-136 -152,-136l-244 0 0 -338.999z"/>
+   <glyph unicode="r" horiz-adv-x="639" d="M82.999 0l107.999 0 0 256.999 183.999 0 134.003 -256.999 117.999 0 -159.997 272 13.9981 6.99904c73.9983,38 117.999,120.999 117.999,204.002 0,147.997 -93.9968,215 -235.997,215l-280.002 0 0 -92.0042 265.001 0c75.0014,0 152,-26.9976 152,-125.996 0,-94.9999 -70.998,-137.003 -151.001,-137.003l-266 0 0 -342.998z"/>
+  </font>
+  <style type="text/css">
+   <![CDATA[
+    @font-face { font-family:"Logirent Demo";font-variant:normal;font-style:normal;font-weight:normal;src:url("#FontID0") format(svg)}
+    .str0 {stroke:black;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:22.9256}
+    .fil2 {fill:black}
+    .fil1 {fill:black}
+    .fil0 {fill:white}
+    .fnt0 {font-weight:normal;font-size:2203.09px;font-family:'Logirent Demo'}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0 str0" x="9.99" y="9.99" width="33015.68" height="23555.41"/>
+  <g id="_1729174980320">
+   <path class="fil1" d="M15537.57 8021.19l-1319.39 0 0 1.52 0 1167.72 0 1142.56 616.46 -4.05 -587.26 2905.65c-4.28,21.19 25.18,31.06 34.53,11.57l1760.16 -3670.38 -504.5 0 0 -225.98 0 -226.01 0 -143.51 1133.94 0c238.8,0 429.66,38.87 572.51,116.54 410.24,208.02 615.92,494.85 615.92,860.47 0,71.99 -13.69,168.02 -40,287.96 -180.58,486.84 -583.93,730.18 -1209.01,730.18l-812.7 0 -459.22 957.57 1313.06 0c483.35,0 905.01,-115.4 1264.96,-345.05 599.98,-435.42 900.48,-965.59 900.48,-1590.66 0,-550.82 -217.1,-1030.69 -652.44,-1438.66 -402.3,-357.68 -906.23,-535.91 -1513,-535.91l-1114.5 0 0 -1.52z"/>
+   <text x="10689.44" y="15554.19"  class="fil2 fnt0">pamara</text>
+  </g>
+ </g>
+</svg>

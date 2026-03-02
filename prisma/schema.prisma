@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @unique
+  email        String   @unique
+  firstName    String
+  lastName     String
+  profileImage String
+  createdAt    DateTime @default(now())
+  orders       Order[]
+  Review       Review[]
+}
+
+model Banner {
+  id          String   @id @default(uuid())
+  title       String
+  imageString String
+  createdAt   DateTime @default(now())
+  category    Category
+}
+
+model Product {
+  id              String           @id @default(uuid())
+  name            String
+  description     String
+  headline        String
+  material        String           @default("100% Cotton")
+  pattern         String           @default("Printed Graphic")
+  fitType         String           @default("Oversized fit")
+  sleeveType      String           @default("Half sleeve")
+  collarStyle     String           @default("Collarless")
+  length          String           @default("Standard length")
+  countryOfOrigin String           @default("India")
+  comfortFeatures String[]
+  manufacturer    String
+  packer          String
+  sku             String?
+  netQuantity     Int              @default(1)
+  status          ProductStatus
+  originalPrice   Int
+  finalPrice      Int
+  images          String[]
+  gender          Gender
+  category        Category
+  isFeatured      Boolean          @default(false)
+  isBestSeller    Boolean?         @default(false)
+  variants        ProductVariant[]
+  orderItems      OrderItem[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  reviews         Review[]
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  userId    String
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model ProductVariant {
+  id         String      @id @default(uuid())
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String
+  size       Size
+  color      Color
+  stock      Int         @default(0)
+  orderItems OrderItem[]
+
+  @@unique([productId, size, color])
+}
+
+model OrderItem {
+  id        String          @id @default(uuid())
+  order     Order           @relation(fields: [orderId], references: [id])
+  orderId   String
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  variantId String?
+  quantity  Int
+  price     Float
+  createdAt DateTime        @default(now())
+  product   Product         @relation(fields: [productId], references: [id])
+  productId String // Add this field
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  status        OrderStatus @default(PENDING)
+  amount        Int
+  userId        String
+  paymentMethod String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id])
+  items         OrderItem[]
+  address       String
+  trackingId    String?
+  arrivalDate   String?
+  courierName   String?
+  discountPrice Int?
+}
+
+model HomePageContent {
+  id              String   @id @default(cuid())
+  headingLarge    String?
+  headingSmall    String?
+  tagline         String?
+  description     String?
+  cardTitle       String?
+  cardDescription String?
+  isActive        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Gender {
+  MEN
+  WOMEN
+  KIDS
+  UNISEX
+}
+
+enum Category {
+  TANKS
+  T_SHIRTS
+  HOODIES
+  SHORTS
+  JEANS
+  OUTERWEAR
+  JOGGERS
+  OVERSIZED_TSHIRTS
+  ACCESSORIES
+  ALL_PRODUCTS
+}
+
+enum Size {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+enum Color {
+  BLACK
+  WHITE
+  GRAY
+  RED
+  BLUE
+  GREEN
+  YELLOW
+  PURPLE
+  PINK
+  ORANGE
+  NAVY
+  BROWN
+  MULTICOLOR
+  DUSTY_GREEN
+  MAROON
+  COOKIE
+  BEIGE
+  SKY_BLUE
+  LIGHT_GREEN
+  KHAKI
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model coupon {
+  id        String   @id @default(uuid())
+  code      String @unique
+  discount  Int
+  totalRevenue Int? @default(0)
+  isValid   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
