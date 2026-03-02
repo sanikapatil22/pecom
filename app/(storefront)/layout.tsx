@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 import { Navbar } from "../../components/storefront/Navbar";
 import Footer from "../../components/storefront/Footer";
-import MaxWidthWrapper from "../../components/MaxWidthWrapper";
 
 export default function StoreFrontLayout({
   children,
@@ -11,9 +10,7 @@ export default function StoreFrontLayout({
   return (
     <>
       <Navbar />
-      <MaxWidthWrapper>
-        <main className="">{children}</main>
-      </MaxWidthWrapper>
+      <main className="min-h-screen pt-24">{children}</main>
       <Footer />
     </>
   );

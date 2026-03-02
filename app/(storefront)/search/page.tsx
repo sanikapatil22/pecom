@@ -19,12 +19,13 @@ export default async function SearchPage() {
     const products = await getProducts();
 
     return (
-        <div className="container mx-auto px-4 py-16 mt-24">
-            <div className="mb-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-8">
+            <div className="mb-10">
+                <h1 className="text-xl md:text-2xl font-medium uppercase tracking-[0.1em] mb-6">Search</h1>
                 <Search />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
                 {products.map((product) => (
                     <ProductCard1
                         key={product.id}
@@ -35,7 +36,7 @@ export default async function SearchPage() {
                         rating={
                             product.reviews.length > 0
                                 ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
-                                : 0 // Default rating if there are no reviews
+                                : 0
                         }
                         reviews={product.reviews.length}
                         imageUrl={product.images}

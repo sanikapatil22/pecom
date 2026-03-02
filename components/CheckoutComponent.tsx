@@ -99,7 +99,7 @@ const CheckoutComponent = ({ cart, totalPrice, totalItems }: Props) => {
           description: "Order placed successfully!",
         });
         if (clearCartResult.success && reductItemVariantStock.success) {
-          await updateCouponUsage(discountedPrice, couponCode); // to add this in totalRevenue
+          await updateCouponUsage(discountedPrice, couponCode);
           router.push("/payment/success");
         } else {
           toast({
@@ -146,36 +146,38 @@ const CheckoutComponent = ({ cart, totalPrice, totalItems }: Props) => {
     return addressParts;
   };
 
-
   return (
-    <div className="min-h-screen text-black p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-12">
-          <Image
-            src="/Pamara2.png"
-            alt="pamara logo"
-            width={190}
-            height={190}
-            className="h-16 w-auto flex-shrink-0 -mr-1 mx-3 bg-black rounded-md"
-          />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            Checkout
-          </h1>
-        </div>
+    <div className="min-h-screen max-w-[1400px] mx-auto px-4 md:px-8 py-8">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-10">
+        <Image
+          src="/Pamara2.png"
+          alt="pamara logo"
+          width={120}
+          height={40}
+          className="h-7 w-auto invert"
+        />
+        <div className="w-px h-6 bg-neutral-300" />
+        <h1 className="text-lg uppercase tracking-[0.15em] font-medium">
+          Checkout
+        </h1>
+      </div>
 
-        <div className="mx-auto grid md:grid-cols-2 gap-16">
-          <div className="bg-white rounded-2xl p-8">
-            <h2 className="text-2xl font-bold border-b border-black/10 pb-4 mb-8">
-              Your Cart ({totalItems} {totalItems === 1 ? 'Item' : 'Items'})
+      <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+        {/* Left Column */}
+        <div className="space-y-8">
+          {/* Cart Items */}
+          <div>
+            <h2 className="text-xs uppercase tracking-[0.2em] font-medium mb-6 pb-3 border-b border-neutral-200">
+              Your Bag ({totalItems} {totalItems === 1 ? 'Item' : 'Items'})
             </h2>
-
-            <div className="space-y-8">
+            <div className="space-y-6">
               {cart?.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center border-b border-black/5 pb-6 hover:bg-gray-50/50 transition-colors rounded-lg p-4"
+                  className="flex gap-4 pb-6 border-b border-neutral-100"
                 >
-                  <div className="relative w-24 h-24 mr-6">
+                  <div className="relative w-20 h-24 flex-shrink-0 bg-neutral-100">
                     <Image
                       src={item.imageString}
                       alt={item.name}
@@ -184,36 +186,35 @@ const CheckoutComponent = ({ cart, totalPrice, totalItems }: Props) => {
                     />
                   </div>
 
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-lg">{item.name}</h3>
-                        <p className="text-black/60 text-sm">
-                          {item.variant.size} | {item.variant.color}
+                        <h3 className="text-sm font-medium uppercase tracking-wide">{item.name}</h3>
+                        <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider">
+                          {item.variant.size} / {item.variant.color}
                         </p>
                       </div>
                       <form action={delItem}>
                         <Input type="hidden" name="productId" value={item.id} />
                         <Input type="hidden" name="variantId" value={item.variant.id} />
                         <DeleteItem>
-                          <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
+                          <Trash2 className="w-3.5 h-3.5 text-neutral-400 hover:text-black transition-colors" />
                         </DeleteItem>
                       </form>
                     </div>
 
                     <div className="flex items-center mt-3 justify-between">
-                      <div className="flex justify-between items-center mt-2 gap-4">
-                        <CartQuantityButtons
-                          itemId={item.id}
-                          initialQuantity={item.quantity}
-                        />
-                      </div>
-
+                      <CartQuantityButtons
+                        itemId={item.id}
+                        initialQuantity={item.quantity}
+                      />
                       <div className="text-right">
-                        <p className="line-through text-black/50 text-sm">
-                          {formatPrice(item.originalPrice * item.quantity)}
-                        </p>
-                        <p className="font-bold text-lg">
+                        {item.originalPrice !== item.finalPrice && (
+                          <p className="line-through text-neutral-400 text-xs">
+                            {formatPrice(item.originalPrice * item.quantity)}
+                          </p>
+                        )}
+                        <p className="text-sm font-medium">
                           {formatPrice(item.finalPrice * item.quantity)}
                         </p>
                       </div>
@@ -221,299 +222,255 @@ const CheckoutComponent = ({ cart, totalPrice, totalItems }: Props) => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-8 mt-12">
-                <h1 className="text-2xl font-semibold mb-8 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Shipping Details
-                </h1>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                        Full Name
-                      </label>
-                      <Input
-                        {...register("fullName", { required: true })}
-                        className="mt-1 block w-full transition-all duration-200 focus:ring-2 focus:ring-black/5"
-                      />
-                      {errors.fullName && <span className="text-red-500 text-sm">This field is required</span>}
-                    </div>
-                    <div>
-                      <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                        Phone Number
-                      </label>
-                      <Input
-                        {...register("phoneNumber", {
-                          required: true,
-                          pattern: /^[0-9]{10}$/
-                        })}
-                        type="tel"
-                        className="mt-1 block w-full"
-                      />
-                      {errors.phoneNumber && <span className="text-red-500 text-sm">Valid phone number required</span>}
-                    </div>
-                  </div>
+          {/* Shipping Form */}
+          <div>
+            <h2 className="text-xs uppercase tracking-[0.2em] font-medium mb-6 pb-3 border-b border-neutral-200">
+              Shipping Details
+            </h2>
+            <form className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Full Name
+                  </label>
+                  <input
+                    {...register("fullName", { required: true })}
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                  {errors.fullName && <span className="text-red-500 text-xs mt-1 block">Required</span>}
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Phone Number
+                  </label>
+                  <input
+                    {...register("phoneNumber", {
+                      required: true,
+                      pattern: /^[0-9]{10}$/
+                    })}
+                    type="tel"
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                  {errors.phoneNumber && <span className="text-red-500 text-xs mt-1 block">Valid phone required</span>}
+                </div>
+              </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="flatOrHouseNo" className="block text-sm font-medium text-gray-700">
-                        Flat/House No
-                      </label>
-                      <Input
-                        {...register("flatOrHouseNo")}
-                        className="mt-1 block w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="buildingName" className="block text-sm font-medium text-gray-700">
-                        Building/Complex Name
-                      </label>
-                      <Input
-                        {...register("buildingName")}
-                        className="mt-1 block w-full"
-                      />
-                    </div>
-                  </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Flat/House No
+                  </label>
+                  <input
+                    {...register("flatOrHouseNo")}
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Building Name
+                  </label>
+                  <input
+                    {...register("buildingName")}
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                </div>
+              </div>
 
-                  <div>
-                    <label htmlFor="streetAddress" className="block text-sm font-medium text-gray-700">
-                      Street Address
-                    </label>
-                    <Input
-                      {...register("streetAddress", { required: true })}
-                      className="mt-1 block w-full"
-                    />
-                    {errors.streetAddress && <span className="text-red-500 text-sm">This field is required</span>}
-                  </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Street Address
+                </label>
+                <input
+                  {...register("streetAddress", { required: true })}
+                  className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                />
+                {errors.streetAddress && <span className="text-red-500 text-xs mt-1 block">Required</span>}
+              </div>
 
-                  <div>
-                    <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">
-                      Landmark (Optional)
-                    </label>
-                    <Input
-                      {...register("landmark")}
-                      className="mt-1 block w-full"
-                    />
-                  </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Landmark (Optional)
+                </label>
+                <input
+                  {...register("landmark")}
+                  className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                />
+              </div>
 
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-                        City
-                      </label>
-                      <Input
-                        {...register("city", { required: true })}
-                        className="mt-1 block w-full"
-                      />
-                      {errors.city && <span className="text-red-500 text-sm">Required</span>}
-                    </div>
-                    <div>
-                      <label htmlFor="state" className="block text-sm font-medium text-gray-700">
-                        State
-                      </label>
-                      <Input
-                        {...register("state", { required: true })}
-                        className="mt-1 block w-full"
-                      />
-                      {errors.state && <span className="text-red-500 text-sm">Required</span>}
-                    </div>
-                    <div>
-                      <label htmlFor="pinCode" className="block text-sm font-medium text-gray-700">
-                        PIN Code
-                      </label>
-                      <Input
-                        {...register("pinCode", {
-                          required: true,
-                          pattern: /^[0-9]{6}$/
-                        })}
-                        className="mt-1 block w-full"
-                      />
-                      {errors.pinCode && <span className="text-red-500 text-sm">Valid PIN required</span>}
-                    </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    City
+                  </label>
+                  <input
+                    {...register("city", { required: true })}
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                  {errors.city && <span className="text-red-500 text-xs mt-1 block">Required</span>}
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    State
+                  </label>
+                  <input
+                    {...register("state", { required: true })}
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                  {errors.state && <span className="text-red-500 text-xs mt-1 block">Required</span>}
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5">
+                    PIN Code
+                  </label>
+                  <input
+                    {...register("pinCode", {
+                      required: true,
+                      pattern: /^[0-9]{6}$/
+                    })}
+                    className="w-full h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors"
+                  />
+                  {errors.pinCode && <span className="text-red-500 text-xs mt-1 block">Valid PIN required</span>}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-6 lg:sticky lg:top-28 h-fit">
+          {/* Payment Method */}
+          <div>
+            <h2 className="text-xs uppercase tracking-[0.2em] font-medium mb-6 pb-3 border-b border-neutral-200">
+              Payment Method
+            </h2>
+            <p className="text-xs text-neutral-400 mb-4">All transactions are secure and encrypted.</p>
+
+            <div className="space-y-3">
+              <div
+                className={`border p-4 cursor-pointer transition-colors ${paymentMethod === "online"
+                  ? "border-black"
+                  : "border-neutral-200 hover:border-neutral-400"
+                  }`}
+                onClick={() => handleTabSwitch("online")}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-4 h-4 border-2 flex items-center justify-center ${paymentMethod === "online" ? "border-black" : "border-neutral-300"}`}>
+                    {paymentMethod === "online" && <div className="w-2 h-2 bg-black" />}
                   </div>
-                </form>
+                  <span className="text-sm font-medium">Razorpay (UPI, Cards, Wallets)</span>
+                </div>
+                <div className="flex gap-2 mt-3 ml-7">
+                  {["/upi.jpeg", "/master.jpeg", "/netbanking.jpeg", "/visa.png"].map((payment) => (
+                    <div key={payment} className="w-10 h-6 bg-white border border-neutral-200 p-0.5 flex items-center justify-center">
+                      <img src={payment} alt="payment" className="w-full h-full object-contain" />
+                    </div>
+                  ))}
+                </div>
+                {paymentMethod === "online" && (
+                  <p className="text-xs text-neutral-400 mt-3 ml-7">
+                    You will be redirected to Razorpay to complete your purchase.
+                  </p>
+                )}
+              </div>
+
+              <div
+                className={`border p-4 cursor-pointer transition-colors ${paymentMethod === "cod"
+                  ? "border-black"
+                  : "border-neutral-200 hover:border-neutral-400"
+                  }`}
+                onClick={() => handleTabSwitch("cod")}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-4 h-4 border-2 flex items-center justify-center ${paymentMethod === "cod" ? "border-black" : "border-neutral-300"}`}>
+                    {paymentMethod === "cod" && <div className="w-2 h-2 bg-black" />}
+                  </div>
+                  <span className="text-sm font-medium">Cash On Delivery</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="space-y-8 h-fit sticky top-8">
-            <div className="bg-white rounded-2xl shadow-sm p-8">
-              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                Payment Method
-              </h2>
-              <p className="text-sm text-gray-600 mb-6">All transactions are secure and encrypted.</p>
-
-              <div className="space-y-4">
-                <div
-                  className={`border rounded-xl p-6 cursor-pointer transition-all duration-200 hover:shadow-md ${paymentMethod === "online"
-                    ? "border-blue-600 bg-blue-50/50"
-                    : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  onClick={() => handleTabSwitch("online")}
-                >
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      id="online"
-                      name="paymentMethod"
-                      value="online"
-                      checked={paymentMethod === "online"}
-                      onChange={() => handleTabSwitch("online")}
-                      className="h-4 w-4 text-blue-600"
-                    />
-                    <label htmlFor="online" className="flex-1 cursor-pointer">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Razorpay Secure (UPI, Cards, Wallets, NetBanking)</span>
-                      </div>
-                      <div className="flex gap-3 my-2">
-                        {["/upi.jpeg", "/master.jpeg", "/netbanking.jpeg", "/visa.png"].map((payment) => (
-                          <div
-                            key={payment}
-                            className="w-12 h-8 bg-white rounded-md shadow-sm p-1 flex items-center justify-center"
-                          >
-                            <img src={payment || "/placeholder.svg"} alt="payment" className="w-full h-full object-contain" />
-                          </div>
-                        ))}
-                      </div>
-                    </label>
-                  </div>
-                  {paymentMethod === "online" && (
-                    <div className="mt-4 border-t pt-4">
-                      <div className="flex items-center justify-center text-sm text-gray-600">
-                        <span>After clicking "Pay now", you will be redirected to Razorpay Secure to complete your purchase securely.</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div
-                  className={`border rounded-xl p-6 cursor-pointer transition-all duration-200 hover:shadow-md ${paymentMethod === "cod"
-                    ? "border-blue-600 bg-blue-50/50"
-                    : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  onClick={() => handleTabSwitch("cod")}
-                >
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      id="cod"
-                      name="paymentMethod"
-                      value="cod"
-                      checked={paymentMethod === "cod"}
-                      onChange={() => handleTabSwitch("cod")}
-                      className="h-4 w-4 text-blue-600"
-                    />
-                    <label htmlFor="cod" className="flex-1 cursor-pointer">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Cash On Delivery</span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative w-full max-w-md mx-auto">
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  await handleSubmitCode(couponCode);
-                }}
-                className="flex items-center space-x-2 bg-white shadow-sm rounded-lg border border-gray-200 "
+          {/* Coupon */}
+          <div>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                await handleSubmitCode(couponCode);
+              }}
+              className="flex gap-2"
+            >
+              <input
+                type="text"
+                placeholder="Coupon code"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                className="flex-1 h-10 px-3 border border-neutral-300 text-sm focus:border-black focus:outline-none transition-colors uppercase tracking-wider placeholder:normal-case placeholder:tracking-normal"
+                disabled={isLoading}
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !couponCode.trim()}
+                className="h-10 px-6 bg-black text-white text-xs uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors disabled:opacity-40"
               >
-                <div className="relative flex-1">
-                  <Tag
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
-                  />
-                  <Input
-                    type="text"
-                    placeholder="Enter coupon code"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    className="pl-10 pr-4 py-2 w-full border-none focus:ring-2 focus:ring-black/20 transition-all duration-300"
-                    disabled={isLoading}
-                  />
+                Apply
+              </button>
+            </form>
+          </div>
+
+          {/* Order Summary */}
+          <div className="bg-neutral-50 p-6">
+            <h2 className="text-xs uppercase tracking-[0.2em] font-medium mb-6 pb-3 border-b border-neutral-200">
+              Order Summary
+            </h2>
+
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-neutral-500">Subtotal</span>
+                <span>{formatPrice(totalPrice)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-neutral-500">Shipping</span>
+                <span className="text-xs uppercase tracking-wider">Free</span>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">Discount ({discount}%)</span>
+                  <span>-{formatPrice(totalPrice - discountedPrice)}</span>
                 </div>
-                <Button
-                  type="submit"
-                  disabled={isLoading || !couponCode.trim()}
-                  className="
-            bg-black text-white hover:bg-gray-800 
-            px-4 py-2 m-1 rounded-md 
-            transition-all duration-300 
-            flex items-center space-x-2
-            disabled:opacity-50 disabled:cursor-not-allowed
-          "
-                >
-                  {isLoading ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Applying...</span>
-                    </div>
-                  ) : (
-                    <span>Apply Coupon</span>
-                  )}
-                </Button>
-              </form>
-              {!couponCode.trim() && (
-                <p className="text-xs text-gray-500 mt-1 text-center">
-                  Enter a coupon code to apply
-                </p>
               )}
-            </div>
-
-
-            <div className="bg-gradient-to-br from-black/90 to-black/75 text-white p-8 rounded-2xl shadow-lg">
-              <h2 className="text-2xl font-bold border-b border-white/10 pb-4 mb-6">
-                Order Summary
-              </h2>
-
-              <div className="space-y-4">
-                <div className="flex justify-between text-gray-300">
-                  <span>Subtotal</span>
-                  <span>{formatPrice(totalPrice)}</span>
-                </div>
-                <div className="flex justify-between text-gray-300">
-                  <span>Shipping</span>
-                  <span className="text-green-400">Free</span>
-                </div>
-                <div className="flex justify-between text-gray-300">
-                  <span>Discount</span>
-                  {discount === 0 ? (
-                    <span className='text-gray-50'>{discount}</span>
-                  ) : (
-                    <span className='text-green-400'>{(discountedPrice - totalPrice).toFixed(1)}</span>
-                  )}
-                </div>
-                <div className="flex justify-between text-xl pt-4 mt-4 border-t border-white/10">
+              <div className="border-t border-neutral-200 pt-3 mt-3">
+                <div className="flex justify-between font-medium text-base">
                   <span>Total</span>
-                  <span className="font-bold">{formatPrice(discountedPrice)}</span>
+                  <span>{formatPrice(discountedPrice)}</span>
                 </div>
               </div>
-
-              {paymentMethod === "online" ? (
-                <CheckoutButton
-                  isFormValid={isValid}
-                  address={formatFullAddress(watch())}
-                  paymentMethod={paymentMethod}
-                  cartItems={cart?.items ?? []}
-                  amount={parseInt(discountedPrice.toFixed(0))}
-                  className="w-full mt-8 bg-white text-gray-900 hover:bg-gray-100"
-                  discountPrice={totalPrice - discountedPrice}
-                  coupon={couponCode}
-                />
-              ) : (
-                <Button
-                  disabled={!isValid || isLoading}
-                  onClick={processPayments}
-                  type="submit"
-                  className="w-full mt-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all disabled:cursor-not-allowed"
-                >
-                  {isLoading && (<Loader2 className='animate-spin mr-2' />)}Place Order
-                </Button>
-              )}
             </div>
+
+            {paymentMethod === "online" ? (
+              <CheckoutButton
+                isFormValid={isValid}
+                address={formatFullAddress(watch())}
+                paymentMethod={paymentMethod}
+                cartItems={cart?.items ?? []}
+                amount={parseInt(discountedPrice.toFixed(0))}
+                className="w-full mt-6 h-12 bg-black text-white text-sm uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors"
+                discountPrice={totalPrice - discountedPrice}
+                coupon={couponCode}
+              />
+            ) : (
+              <button
+                disabled={!isValid || isLoading}
+                onClick={processPayments}
+                type="submit"
+                className="w-full mt-6 h-12 bg-black text-white text-sm uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {isLoading && (<Loader2 className='animate-spin mr-2 w-4 h-4' />)}
+                Place Order
+              </button>
+            )}
           </div>
         </div>
       </div>

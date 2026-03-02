@@ -20,14 +20,12 @@ interface CategoryPageProps {
   title: string;
 }
 
-// Client component wrapper
 export function CategoryPageClient({ initialData, title }: CategoryPageProps) {
   const [filteredData, setFilteredData] = useState<ProductWithReviews[]>(initialData);
 
   const handleFilterChange = (filters: FilterOptions) => {
     let filtered = [...initialData];
 
-    // Apply price filter
     filtered = filtered.filter(
       (product) =>
         product.finalPrice >= filters.priceRange[0] &&
@@ -47,23 +45,27 @@ export function CategoryPageClient({ initialData, title }: CategoryPageProps) {
       case "price-desc":
         sorted.sort((a, b) => b.finalPrice - a.finalPrice);
         break;
-      // Add logic for 'newest' and 'popular' if you have those fields
     }
 
     setFilteredData(sorted);
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{title}</h1>
+    <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+      <div className="flex justify-between items-center mb-8 border-b border-neutral-200 pb-4">
+        <div>
+          <h1 className="text-xl md:text-2xl font-medium uppercase tracking-[0.1em]">{title}</h1>
+          <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider">
+            {filteredData.length} {filteredData.length === 1 ? "product" : "products"}
+          </p>
+        </div>
         <FilterModal
           onFilterChange={handleFilterChange}
           onSortChange={handleSortChange}
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
         {filteredData.map((item) => (
           <ProductCard1
             key={item.id}
@@ -76,7 +78,7 @@ export function CategoryPageClient({ initialData, title }: CategoryPageProps) {
             rating={
               item.reviews.length > 0
                 ? item.reviews.reduce((sum, review) => sum + review.rating, 0) / item.reviews.length
-                : 0 // Default rating if there are no reviews
+                : 0
             }
             reviews={item.reviews.length}
             imageUrl={item.images}
@@ -84,6 +86,14 @@ export function CategoryPageClient({ initialData, title }: CategoryPageProps) {
           />
         ))}
       </div>
+
+      {filteredData.length === 0 && (
+        <div className="text-center py-20">
+          <p className="text-sm uppercase tracking-[0.15em] text-neutral-400">
+            No products found
+          </p>
+        </div>
+      )}
     </div>
   );
 }

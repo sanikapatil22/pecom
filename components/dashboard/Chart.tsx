@@ -7,7 +7,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   Line,
 } from "recharts";
 
@@ -35,19 +34,38 @@ const aggregateData = (data: any) => {
 };
 
 export function Chart({ data }: iAppProps) {
-  const proccesedData = aggregateData(data);
+  const processedData = aggregateData(data);
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={proccesedData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
+    <ResponsiveContainer width="100%" height={350}>
+      <LineChart data={processedData}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+        <XAxis
+          dataKey="date"
+          tick={{ fontSize: 11, fill: "#a3a3a3" }}
+          axisLine={{ stroke: "#e5e5e5" }}
+          tickLine={false}
+        />
+        <YAxis
+          tick={{ fontSize: 11, fill: "#a3a3a3" }}
+          axisLine={{ stroke: "#e5e5e5" }}
+          tickLine={false}
+        />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#000",
+            border: "none",
+            borderRadius: 0,
+            color: "#fff",
+            fontSize: 12,
+          }}
+          labelStyle={{ color: "#a3a3a3" }}
+        />
         <Line
           type="monotone"
-          stroke="#3b82f6"
-          activeDot={{ r: 8 }}
+          stroke="#000"
+          strokeWidth={2}
+          activeDot={{ r: 5, fill: "#000", stroke: "#fff", strokeWidth: 2 }}
+          dot={false}
           dataKey="revenue"
         />
       </LineChart>

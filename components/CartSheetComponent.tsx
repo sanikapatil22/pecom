@@ -25,76 +25,69 @@ const CartSheetComponent = ({ totalItems, cart, totalPrice }: Props) => {
     <Sheet>
       <SheetTrigger asChild>
         <div
-          className="text-white hover:text-gray-300 transition-colors relative p-0 cursor-pointer"
+          className="text-neutral-700 hover:text-black transition-colors relative p-0 cursor-pointer"
           aria-label="Shopping bag"
         >
-          <ShoppingBag className="w-5 h-5" />
+          <ShoppingBag className="w-[18px] h-[18px]" strokeWidth={1.5} />
           {totalItems > 0 && (
-            <span className="absolute -top-1.5 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+            <span className="absolute -top-1.5 -right-2 bg-black text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center">
               {totalItems}
             </span>
           )}
         </div>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl">
-        <SheetHeader className="space-y-2.5 pr-6">
-          <SheetTitle className="text-2xl font-bold flex items-center space-x-2">
-            <ShoppingBag className="w-6 h-6" />
-            <span>Shopping Cart ({totalItems})</span>
+      <SheetContent className="w-full sm:max-w-md flex flex-col">
+        <SheetHeader className="pr-6">
+          <SheetTitle className="text-lg font-medium uppercase tracking-[0.1em]">
+            Your Bag ({totalItems})
           </SheetTitle>
         </SheetHeader>
 
-        <div className="mt-8">
+        <div className="flex-1 overflow-y-auto mt-6">
           {!cart || !cart.items || cart.items.length === 0 ? (
             <EmptyCart />
           ) : (
-            <div className="space-y-6">
-              <div className="space-y-4">
-                {cart.items.map((item, index) => (
-                  <div key={`${item.id}-${item.variant.color}`}>
-                    <CartItemComponent item={item} />
-                    {index < cart.items.length - 1 && (
-                      <Separator className="my-4" />
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div className="space-y-4">
-                <Separator />
-                <div className="rounded-lg bg-gray-50 p-4">
-                  <h3 className="font-medium mb-3">Cart Summary</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Subtotal</span>
-                      <span>₹{totalPrice.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Shipping</span>
-                      <span className="text-green-600">Free</span>
-                    </div>
-                    <Separator className="my-2" />
-                    <div className="flex justify-between font-medium">
-                      <span>Total</span>
-                      <span className="text-lg text-orange-500">
-                        ₹{totalPrice.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
+            <div className="space-y-4">
+              {cart.items.map((item, index) => (
+                <div key={`${item.id}-${item.variant.color}`}>
+                  <CartItemComponent item={item} />
+                  {index < cart.items.length - 1 && (
+                    <Separator className="my-4" />
+                  )}
                 </div>
-
-                <SheetClose asChild>
-                  <Link
-                    href={`/checkout`}
-                    className={cn(buttonVariants(), "w-full py-2")}
-                  >
-                    Checkout
-                  </Link>
-                </SheetClose>
-              </div>
+              ))}
             </div>
           )}
         </div>
+
+        {cart && cart.items && cart.items.length > 0 && (
+          <div className="border-t pt-4 mt-4 space-y-4">
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-neutral-500 uppercase tracking-wider text-xs">Subtotal</span>
+                <span className="font-medium">₹{totalPrice.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-neutral-500 uppercase tracking-wider text-xs">Shipping</span>
+                <span className="text-xs uppercase tracking-wider">Free</span>
+              </div>
+              <Separator className="my-2" />
+              <div className="flex justify-between font-medium text-base">
+                <span className="uppercase tracking-wider text-sm">Total</span>
+                <span>₹{totalPrice.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <SheetClose asChild>
+              <Link
+                href="/checkout"
+                className="block w-full bg-black text-white text-center py-3 text-sm uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors"
+              >
+                Checkout
+              </Link>
+            </SheetClose>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   )

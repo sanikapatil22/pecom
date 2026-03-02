@@ -1,88 +1,76 @@
 import prisma from "@/app/lib/db";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, PartyPopper, ShoppingBag, User2 } from "lucide-react";
+import { DollarSign, ShoppingBag, Package, Users } from "lucide-react";
 
 async function getData() {
   const [user, products, order] = await Promise.all([
     prisma.user.findMany({
-      select: {
-        id: true,
-      },
+      select: { id: true },
     }),
-
     prisma.product.findMany({
-      select: {
-        id: true,
-      },
+      select: { id: true },
     }),
-
     prisma.order.findMany({
-      select: {
-        amount: true,
-      },
+      select: { amount: true },
     }),
   ]);
 
-  return {
-    user,
-    products,
-    order,
-  };
+  return { user, products, order };
 }
 
 export async function DashboardStats() {
   const { products, user, order } = await getData();
 
-  const totalAmount = order.reduce((accumalator, currentValue) => {
-    return accumalator + currentValue.amount;
-  }, 0);
+  const totalAmount = order.reduce((acc, curr) => acc + curr.amount, 0);
+
+  const stats = [
+    {
+      label: "Total Revenue",
+      value: `₹${new Intl.NumberFormat("en-IN").format(totalAmount)}`,
+      icon: DollarSign,
+      description: "Lifetime revenue",
+    },
+    {
+      label: "Total Sales",
+      value: `${order.length}`,
+      icon: ShoppingBag,
+      description: "Orders placed",
+    },
+    {
+      label: "Products",
+      value: `${products.length}`,
+      icon: Package,
+      description: "Active listings",
+    },
+    {
+      label: "Users",
+      value: `${user.length}`,
+      icon: Users,
+      description: "Registered accounts",
+    },
+  ];
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle>Total Revenue</CardTitle>
-          <DollarSign className="h-4 w-4 text-green-500" />
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">
-            ₹{new Intl.NumberFormat("en-IN").format(totalAmount)}          </p>
-          <p className="text-xs text-muted-foreground">Based on 100 Charges</p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle>Total Sales</CardTitle>
-          <ShoppingBag className="h-4 w-4 text-blue-500" />
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">+{order.length}</p>
-          <p className="text-xs text-muted-foreground">
-            Total Sales on PAMARA
-          </p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle>Total Products</CardTitle>
-          <PartyPopper className="h-4 w-4 text-indigo-500" />
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">{products.length}</p>
-          <p className="text-xs text-muted-foreground">
-            Total Products created
-          </p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle>Total Users</CardTitle>
-          <User2 className="h-4 w-4 text-orange-500" />
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">{user.length}</p>
-          <p className="text-xs text-muted-foreground">Total Users Signed Up</p>
-        </CardContent>
-      </Card>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {stats.map((stat) => {
+        const Icon = stat.icon;
+        return (
+          <div
+            key={stat.label}
+            className="bg-white border border-neutral-200 p-5"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs uppercase tracking-[0.1em] text-neutral-500 font-medium">
+                {stat.label}
+              </span>
+              <div className="w-8 h-8 bg-neutral-100 flex items-center justify-center">
+                <Icon className="w-4 h-4 text-neutral-600" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold tracking-tight">{stat.value}</p>
+            <p className="text-xs text-neutral-400 mt-1">{stat.description}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }

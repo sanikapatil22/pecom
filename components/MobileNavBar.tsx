@@ -16,6 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import NavItem from "./NavItem";
+import Link from "next/link";
 
 const MEN_SECTIONS = [
   {
@@ -23,12 +24,6 @@ const MEN_SECTIONS = [
     href: "/collections/t-shirts",
     description: "Complete t-shirt collection",
   },
-  // Remove or comment out the separate oversized section
-  // {
-  //   name: "Oversized T Shirts",
-  //   href: "/collections/oversized-tshirts",
-  //   description: "Curated collection of oversized t-shirts",
-  // },
   {
     name: "Tanks",
     href: "/collections/tanks",
@@ -53,53 +48,102 @@ const MobileNavbar = () => {
     <div className="md:hidden block">
       <Sheet>
         <SheetTrigger asChild>
-          <button className="text-white hover:text-gray-200 transition-colors">
-            <Menu className="w-8 h-8" />
+          <button className="text-neutral-700 hover:text-black transition-colors">
+            <Menu className="w-6 h-6" strokeWidth={1.5} />
           </button>
         </SheetTrigger>
         <SheetContent
           side="left"
-          className="flex flex-col gap-6 p-6 pt-16"
+          className="flex flex-col gap-0 p-0 pt-12 w-[300px]"
         >
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col">
             <SheetClose asChild>
-              <NavItem href="/">Home</NavItem>
+              <Link
+                href="/"
+                className="px-6 py-3 text-sm uppercase tracking-[0.15em] font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 transition-colors border-b border-neutral-100"
+              >
+                Home
+              </Link>
             </SheetClose>
             <SheetClose asChild>
-              <NavItem href="/collections/all-products">All Products</NavItem>
+              <Link
+                href="/collections/all-products"
+                className="px-6 py-3 text-sm uppercase tracking-[0.15em] font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 transition-colors border-b border-neutral-100"
+              >
+                All Products
+              </Link>
             </SheetClose>
             <SheetClose asChild>
-              <NavItem href="/products/new">New</NavItem>
+              <Link
+                href="/products/new"
+                className="px-6 py-3 text-sm uppercase tracking-[0.15em] font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 transition-colors border-b border-neutral-100"
+              >
+                New
+              </Link>
             </SheetClose>
             {user && (
               <SheetClose asChild>
-                <NavItem href="/my-orders">My Orders</NavItem>
+                <Link
+                  href="/my-orders"
+                  className="px-6 py-3 text-sm uppercase tracking-[0.15em] font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 transition-colors border-b border-neutral-100"
+                >
+                  My Orders
+                </Link>
               </SheetClose>
             )}
             {user && (
               <SheetClose asChild>
-                <NavItem href="/wishlist">Wishlist</NavItem>
+                <Link
+                  href="/wishlist"
+                  className="px-6 py-3 text-sm uppercase tracking-[0.15em] font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 transition-colors border-b border-neutral-100"
+                >
+                  Wishlist
+                </Link>
               </SheetClose>
             )}
 
             <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="mens" className="border-b">
-                <AccordionTrigger className="font-medium">
-                  Mens
+              <AccordionItem value="mens" className="border-b border-neutral-100">
+                <AccordionTrigger className="px-6 py-3 text-sm uppercase tracking-[0.15em] font-medium text-neutral-700 hover:no-underline">
+                  Men
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex flex-col gap-3 pt-2">
+                  <div className="flex flex-col bg-neutral-50">
                     {MEN_SECTIONS.map((section) => (
                       <SheetClose key={section.href} asChild>
-                        <NavItem href={section.href}>
+                        <Link
+                          href={section.href}
+                          className="px-8 py-2.5 text-sm text-neutral-600 hover:text-black transition-colors"
+                        >
                           {section.name}
-                        </NavItem>
+                        </Link>
                       </SheetClose>
                     ))}
                   </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+
+            {!user && (
+              <div className="mt-6 px-6 space-y-2">
+                <SheetClose asChild>
+                  <Link
+                    href="/api/auth/login"
+                    className="block w-full text-center py-2.5 text-sm uppercase tracking-[0.15em] font-medium bg-black text-white hover:bg-neutral-800 transition-colors"
+                  >
+                    Login
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="/api/auth/register"
+                    className="block w-full text-center py-2.5 text-sm uppercase tracking-[0.15em] font-medium border border-black text-black hover:bg-black hover:text-white transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </SheetClose>
+              </div>
+            )}
           </nav>
         </SheetContent>
       </Sheet>

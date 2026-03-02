@@ -8,8 +8,7 @@ import { DeleteItem } from "@/components/SubmitButtons";
 import { CartQuantityButtons } from "./CartQuantityBUtton";
 import CartSheetComponent from "../CartSheetComponent";
 import { SheetClose } from "../ui/sheet";
-import { buttonVariants } from "../ui/button";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export interface CartItem {
   id: string;
@@ -45,7 +44,6 @@ export default async function CartSheet() {
     totalItems += item.quantity;
   });
 
-
   return (
     <CartSheetComponent totalItems={totalItems} cart={cart} totalPrice={totalPrice} />
   );
@@ -53,22 +51,21 @@ export default async function CartSheet() {
 
 export function EmptyCart() {
   return (
-    <div className="text-center py-12">
-      <div className="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-        <ShoppingBag className="w-8 h-8 text-gray-400" />
+    <div className="text-center py-16">
+      <div className="mx-auto w-14 h-14 border border-neutral-200 flex items-center justify-center mb-4">
+        <ShoppingBag className="w-6 h-6 text-neutral-400" strokeWidth={1.5} />
       </div>
-      <h2 className="text-xl font-medium mb-2">Your cart is empty</h2>
-      <p className="text-gray-500 mb-6 max-w-xs mx-auto">
-        Looks like you haven&apos;t added anything yet. Start shopping to fill
-        it up!
+      <h2 className="text-sm uppercase tracking-[0.15em] font-medium mb-2">Your bag is empty</h2>
+      <p className="text-neutral-500 text-sm mb-6 max-w-xs mx-auto">
+        Looks like you haven&apos;t added anything yet.
       </p>
       <SheetClose asChild>
-        <a
+        <Link
           href="/collections/all-products"
-          className={cn(buttonVariants(), "w-full")}
+          className="inline-block bg-black text-white text-xs uppercase tracking-[0.15em] font-medium px-8 py-3 hover:bg-neutral-800 transition-colors"
         >
           Continue Shopping
-        </a>
+        </Link>
       </SheetClose>
     </div>
   );
@@ -76,51 +73,39 @@ export function EmptyCart() {
 
 export function CartItemComponent({ item }: { item: CartItem }) {
   return (
-    <div className="flex items-start space-x-4 p-4 border border-gray-300 rounded-md bg-gray-100/80">
-      <div className="relative w-20 h-20 rounded-sm overflow-hidden flex-shrink-0">
+    <div className="flex items-start gap-4 py-2">
+      <div className="relative w-20 h-24 flex-shrink-0 bg-neutral-100">
         <Image
           src={item.imageString}
           alt={item.name}
           fill
           sizes="80px"
-          className="object-cover bg-gray-50"
+          className="object-cover"
         />
       </div>
       <div className="flex-grow min-w-0">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="font-medium truncate pr-2">{item.name}</h3>
-            <p className="text-sm text-gray-500 mt-0.5">{item.category}</p>
-            <p className="text-sm text-gray-500 flex items-center gap-1">
-              <span
-                className="inline-block w-3 h-3 rounded-full border border-gray-300"
-                style={{
-                  backgroundColor: item.variant.color.toLowerCase(),
-                  border:
-                    item.variant.color.toLowerCase() === "white"
-                      ? "1px solid #e5e7eb"
-                      : "none",
-                }}
-              />
-              {item.variant.color} • Size {item.variant.size}
+            <h3 className="text-sm font-medium uppercase tracking-wide truncate pr-2">{item.name}</h3>
+            <p className="text-xs text-neutral-500 mt-1 uppercase tracking-wider">
+              {item.variant.color} / {item.variant.size}
             </p>
-
           </div>
           <form action={delItem}>
             <input type="hidden" name="productId" value={item.id} />
             <input type="hidden" name="variantId" value={item.variant.id} />
             <DeleteItem>
-              <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
+              <Trash2 className="w-3.5 h-3.5 text-neutral-400 hover:text-black transition-colors" />
             </DeleteItem>
           </form>
         </div>
-        <div className="flex justify-between items-center mt-2">
+        <div className="flex justify-between items-center mt-3">
           <CartQuantityButtons
             itemId={item.id}
             initialQuantity={item.quantity}
           />
-          <p className="font-medium">
-            ₹{(item.finalPrice * item.quantity).toFixed(2)}
+          <p className="text-sm font-medium">
+            ₹{(item.finalPrice * item.quantity).toFixed(0)}
           </p>
         </div>
       </div>

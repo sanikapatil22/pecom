@@ -1,11 +1,3 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { DashboardStats } from "../../components/dashboard/DashboardStats";
 import { RecentSales } from "../../components/dashboard/RecentSales";
 import { Chart } from "../../components/dashboard/Chart";
@@ -44,22 +36,28 @@ export default async function Dashboard() {
   noStore();
   const data = await getData();
   return (
-    <>
+    <div>
+      <h1 className="text-xl font-bold uppercase tracking-[0.05em] mb-6">Dashboard</h1>
+
       <DashboardStats />
-      <div className="grid gap-4 md:gp-8 lg:grid-cols-2 xl:grid-cols-3 mt-10">
-        <Card className="xl:col-span-2">
-          <CardHeader>
-            <CardTitle>Transactions</CardTitle>
-            <CardDescription>
-              Recent transactions from the last 7 days
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+
+      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 mt-8">
+        {/* Chart */}
+        <div className="xl:col-span-2 bg-white border border-neutral-200">
+          <div className="px-5 py-4 border-b border-neutral-200">
+            <h3 className="text-sm font-semibold uppercase tracking-[0.05em]">
+              Transactions
+            </h3>
+            <p className="text-xs text-neutral-400 mt-0.5">Last 7 days</p>
+          </div>
+          <div className="p-5">
             <Chart data={data} />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+
+        {/* Recent Sales */}
         <RecentSales />
       </div>
-    </>
+    </div>
   );
 }
