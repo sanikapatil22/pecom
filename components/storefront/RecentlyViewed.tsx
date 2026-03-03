@@ -47,9 +47,11 @@ export default function RecentlyViewed({ currentProductId }: Props) {
 
   return (
     <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-16 md:py-20">
-      <h2 className="text-sm uppercase tracking-[0.25em] font-medium text-center mb-10 bg-neutral-100 inline-block px-6 py-2 mx-auto block w-fit">
-        Recently Viewed
-      </h2>
+      <div className="flex justify-center mb-10">
+        <h2 className="text-sm uppercase tracking-[0.25em] font-medium bg-neutral-100 inline-block px-6 py-2">
+          Recently Viewed
+        </h2>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8">
         {products.slice(0, 4).map((product) => (
           <Link key={product.id} href={`/product/${product.id}`} className="group block">
