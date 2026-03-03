@@ -64,6 +64,18 @@ export function ProductCard1({
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           priority
         />
+        {images.length > 1 && (
+          <button
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 text-white text-xl leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentImage((prev) => (prev + 1) % images.length);
+            }}
+          >
+            ›
+          </button>
+        )}
       </div>
       <div className="mt-3 space-y-1">
         <h3 className="text-xs uppercase tracking-[0.05em] font-medium text-neutral-800 line-clamp-1">

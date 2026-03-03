@@ -48,13 +48,6 @@ const navItems: NavItem[] = [
             { name: "All Products", href: "/collections/all-products" },
           ],
         },
-        {
-          heading: "Featured",
-          links: [
-            { name: "New Drop", href: "/collections/all-products" },
-            { name: "Best Sellers", href: "/collections/all-products" },
-          ],
-        },
       ],
       image: {
         src: "/men.jpeg",
@@ -77,13 +70,6 @@ const navItems: NavItem[] = [
             { name: "Outerwear", href: "/collections/outerwear" },
             { name: "Oversized", href: "/collections/oversized-tshirts" },
             { name: "All Products", href: "/collections/all-products" },
-          ],
-        },
-        {
-          heading: "Featured",
-          links: [
-            { name: "New Drop", href: "/collections/all-products" },
-            { name: "Best Sellers", href: "/collections/all-products" },
           ],
         },
       ],
@@ -113,7 +99,6 @@ const navItems: NavItem[] = [
         {
           heading: "Trending",
           links: [
-            { name: "Best Sellers", href: "/collections/all-products" },
             { name: "Outerwear", href: "/collections/outerwear" },
             { name: "Accessories", href: "/collections/accessories" },
           ],
@@ -135,13 +120,6 @@ const navItems: NavItem[] = [
             { name: "Regular Fit", href: "/collections/t-shirts" },
           ],
         },
-        {
-          heading: "Featured",
-          links: [
-            { name: "New Drop", href: "/collections/all-products" },
-            { name: "Best Sellers", href: "/collections/all-products" },
-          ],
-        },
       ],
     },
   },
@@ -156,13 +134,6 @@ const navItems: NavItem[] = [
             { name: "All Hoodies", href: "/collections/hoodies" },
             { name: "Zip-Up", href: "/collections/hoodies" },
             { name: "Pullover", href: "/collections/hoodies" },
-          ],
-        },
-        {
-          heading: "Featured",
-          links: [
-            { name: "New Drop", href: "/collections/all-products" },
-            { name: "Best Sellers", href: "/collections/all-products" },
           ],
         },
       ],
@@ -180,13 +151,6 @@ const navItems: NavItem[] = [
             { name: "Shorts", href: "/collections/shorts" },
           ],
         },
-        {
-          heading: "Featured",
-          links: [
-            { name: "New Drop", href: "/collections/all-products" },
-            { name: "Best Sellers", href: "/collections/all-products" },
-          ],
-        },
       ],
     },
   },
@@ -201,13 +165,6 @@ const navItems: NavItem[] = [
             { name: "All Tanks", href: "/collections/tanks" },
             { name: "Stringers", href: "/collections/tanks" },
             { name: "Cutoffs", href: "/collections/tanks" },
-          ],
-        },
-        {
-          heading: "Featured",
-          links: [
-            { name: "New Drop", href: "/collections/all-products" },
-            { name: "Best Sellers", href: "/collections/all-products" },
           ],
         },
       ],

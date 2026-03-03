@@ -42,7 +42,9 @@ interface GenderTabsProps {
   womenProducts: GenderProduct[];
 }
 
-function ProductCard({ product }: { product: GenderProduct }) {
+export type { GenderProduct };
+
+export function ProductCard({ product }: { product: GenderProduct }) {
   const [imageIndex, setImageIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const uniqueColors = Array.from(new Set(product.variants.map((v) => v.color)));
@@ -62,24 +64,27 @@ function ProductCard({ product }: { product: GenderProduct }) {
     }).format(price);
 
   return (
-    <Link href={`/product/${product.id}`} className="group block">
-      <div
-        className="relative w-full overflow-hidden bg-neutral-100"
-        style={{ paddingTop: "133.33%" }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <Image
-          src={images[imageIndex]}
-          alt={product.name}
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 50vw, 25vw"
-        />
+    <div
+      className="group block"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Image area — button lives outside Link so clicks don't navigate */}
+      <div className="relative w-full overflow-hidden bg-neutral-100" style={{ paddingTop: "133.33%" }}>
+        <Link href={`/product/${product.id}`} className="absolute inset-0">
+          <Image
+            src={images[imageIndex]}
+            alt={product.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 50vw, 25vw"
+          />
+        </Link>
 
-        {/* Next image arrow */}
+        {/* Next image arrow — outside Link, won't navigate */}
         {images.length > 1 && hovered && (
           <button
+            type="button"
             onClick={nextImage}
             className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
             aria-label="Next image"
@@ -90,7 +95,7 @@ function ProductCard({ product }: { product: GenderProduct }) {
 
         {/* Image dots indicator */}
         {images.length > 1 && hovered && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10 pointer-events-none">
             {images.map((_, i) => (
               <span
                 key={i}
@@ -103,39 +108,42 @@ function ProductCard({ product }: { product: GenderProduct }) {
         )}
       </div>
 
-      <div className="mt-3 space-y-1.5">
-        <h3 className="text-xs uppercase tracking-[0.05em] font-medium text-neutral-800 line-clamp-1">
-          {product.name}
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">{formatPrice(product.finalPrice)}</span>
-          {product.originalPrice > product.finalPrice && (
-            <span className="text-xs text-neutral-400 line-through">
-              {formatPrice(product.originalPrice)}
-            </span>
+      {/* Text info — clicking navigates to product */}
+      <Link href={`/product/${product.id}`}>
+        <div className="mt-3 space-y-1.5">
+          <h3 className="text-xs uppercase tracking-[0.05em] font-medium text-neutral-800 line-clamp-1">
+            {product.name}
+          </h3>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">{formatPrice(product.finalPrice)}</span>
+            {product.originalPrice > product.finalPrice && (
+              <span className="text-xs text-neutral-400 line-through">
+                {formatPrice(product.originalPrice)}
+              </span>
+            )}
+          </div>
+
+          {/* Color Swatches */}
+          {uniqueColors.length > 0 && (
+            <div className="flex items-center gap-1.5 pt-0.5">
+              {uniqueColors.map((color) => (
+                <span
+                  key={color}
+                  className="w-4 h-4 rounded-sm border border-neutral-300"
+                  style={{
+                    background:
+                      color === "MULTICOLOR"
+                        ? colorMap.MULTICOLOR
+                        : colorMap[color] || "#ccc",
+                  }}
+                  title={color.replace(/_/g, " ")}
+                />
+              ))}
+            </div>
           )}
         </div>
-
-        {/* Color Swatches */}
-        {uniqueColors.length > 0 && (
-          <div className="flex items-center gap-1.5 pt-0.5">
-            {uniqueColors.map((color) => (
-              <span
-                key={color}
-                className="w-4 h-4 rounded-sm border border-neutral-300"
-                style={{
-                  background:
-                    color === "MULTICOLOR"
-                      ? colorMap.MULTICOLOR
-                      : colorMap[color] || "#ccc",
-                }}
-                title={color.replace(/_/g, " ")}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 

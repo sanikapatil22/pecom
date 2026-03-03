@@ -1,10 +1,8 @@
 import { Category } from "@prisma/client";
 import CategoriesSelection from "../../components/storefront/CategorySelection";
-import { FeaturedProducts } from "../../components/storefront/FeaturedProducts";
 import Hero from "../../components/storefront/Hero";
 import GenderTabs from "../../components/storefront/GenderTabs";
 import prisma from "../lib/db";
-import { ProductCard1 } from "@/components/storefront/product-card";
 
 const getData = async () => {
   const categoriesWithProducts = await Promise.all(
@@ -45,23 +43,10 @@ const getMainPageContent = async () => {
 };
 
 const getAllData = async () => {
-  const [categoriesData, mainPageContent, bestSellerContent, menProducts, womenProducts] =
+  const [categoriesData, mainPageContent, menProducts, womenProducts] =
     await Promise.all([
       getData(),
       getMainPageContent(),
-      prisma.product.findMany({
-        where: {
-          isFeatured: true,
-        },
-        include: {
-          reviews: true,
-          variants: true,
-        },
-        take: 10,
-        orderBy: {
-          createdAt: "desc",
-        },
-      }),
       prisma.product.findMany({
         where: {
           gender: "MEN",
@@ -132,7 +117,6 @@ const getAllData = async () => {
   return {
     categoriesData,
     mainPageContent,
-    bestSellerContent,
     menProducts,
     womenProducts,
   };
@@ -153,7 +137,7 @@ const defaultData = {
 };
 
 export default async function Page() {
-  const { categoriesData, mainPageContent, bestSellerContent, menProducts, womenProducts } =
+  const { categoriesData, mainPageContent, menProducts, womenProducts } =
     await getAllData();
 
   return (
@@ -165,34 +149,6 @@ export default async function Page() {
 
       {/* Category Carousel */}
       <CategoriesSelection featuredProducts={categoriesData} />
-
-      {/* Best Sellers Grid */}
-      <section className="section-padding">
-        <h2 className="section-heading mb-10">Best Sellers</h2>
-        <div className="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
-          {bestSellerContent.map((product) => (
-            <ProductCard1
-              key={product.id}
-              id={product.id}
-              imageUrl={product.images[0]}
-              originalPrice={product.originalPrice}
-              price={product.finalPrice}
-              tagline={product.headline}
-              rating={
-                product.reviews.length > 0
-                  ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
-                    product.reviews.length
-                  : 0
-              }
-              reviews={product.reviews.length}
-              title={product.name}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* Featured Products */}
-      <FeaturedProducts />
     </div>
   );
 }

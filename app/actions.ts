@@ -386,12 +386,16 @@ export async function createBanner(prevState: any, formData: FormData) {
 }
 
 export const getBanner = async (category: string) => {
-  const banner = await prisma.banner.findFirst({
-    where: {
-      category: getCategoryEnum(category.toLowerCase().replace("_", "-")),
-    },
-  });
-  return banner;
+  try {
+    const banner = await prisma.banner.findFirst({
+      where: {
+        category: getCategoryEnum(category.toLowerCase().replace(/_/g, "-")),
+      },
+    });
+    return banner;
+  } catch {
+    return null;
+  }
 };
 
 export async function deleteBanner(formData: FormData) {
@@ -898,34 +902,22 @@ export async function getProducts(
         break;
     }
 
-    // Base filter structure
-    type ProductFilter = {
-      status: "PUBLISHED";
-      OR?: Array<{ category: Category }>;
-      AND?: Array<{
-        OR?: Array<Prisma.ProductWhereInput>;
-      }>;
-      finalPrice?: {
-        gte?: number;
-        lte?: number;
-      };
-    };
-
-    const whereClause: ProductFilter = {
+    const whereClause: Prisma.ProductWhereInput = {
       status: "PUBLISHED",
     };
 
     // Handle category filtering
-    if (category === "t-shirts") {
-      // Combined T-shirts categories
+    if (category === "men") {
+      whereClause.gender = "MEN";
+    } else if (category === "women") {
+      whereClause.gender = "WOMEN";
+    } else if (category === "t-shirts") {
       whereClause.OR = [
         { category: "T_SHIRTS" as Category },
-        { category: "OVERSIZED_TSHIRTS" as Category }
+        { category: "OVERSIZED_TSHIRTS" as Category },
       ];
     } else if (category !== "all-products") {
-      whereClause.OR = [{
-        category: getCategoryEnum(category)
-      }];
+      whereClause.OR = [{ category: getCategoryEnum(category) }];
     }
 
     // Handle additional filters if present
@@ -937,7 +929,7 @@ export async function getProducts(
         const categoryFilters = filters.categories.filter(cat => cat !== "ALL_PRODUCTS");
         if (categoryFilters.length > 0) {
           whereClause.OR = categoryFilters.map(cat => ({
-            category: getCategoryEnum(cat.toLowerCase().replace("_", "-"))
+            category: getCategoryEnum(cat.toLowerCase().replace(/_/g, "-"))
           }));
         }
       }
@@ -988,15 +980,23 @@ export async function getProducts(
       orderBy,
       include: {
         reviews: true,
-      }
+        variants: {
+          select: { color: true },
+          distinct: ["color"],
+        },
+      },
     });
 
     // Generate appropriate title
     let title = "All Products";
-    if (category === "t-shirts") {
+    if (category === "men") {
+      title = "For Him";
+    } else if (category === "women") {
+      title = "For Her";
+    } else if (category === "t-shirts") {
       title = "All T-Shirts";
     } else if (category !== "all-products") {
-      title = `Products for ${category
+      title = `All ${category
         .split("-")
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ")}`;
