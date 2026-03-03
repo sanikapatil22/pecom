@@ -235,32 +235,6 @@ export default function ProductForm() {
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Gender</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a gender" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="MEN">Men</SelectItem>
-                        <SelectItem value="WOMEN" disabled>Women</SelectItem>
-                        <SelectItem value="KIDS" disabled>Kids</SelectItem>
-                        <SelectItem value="UNISEX" disabled>Unisex</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="category"
                 render={({ field }) => (
                   <FormItem>

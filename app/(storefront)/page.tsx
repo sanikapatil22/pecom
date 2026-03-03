@@ -43,13 +43,12 @@ const getMainPageContent = async () => {
 };
 
 const getAllData = async () => {
-  const [categoriesData, mainPageContent, menProducts, womenProducts] =
+  const [categoriesData, mainPageContent, menProducts] =
     await Promise.all([
       getData(),
       getMainPageContent(),
       prisma.product.findMany({
         where: {
-          gender: "MEN",
           status: "PUBLISHED",
         },
         select: {
@@ -69,48 +68,6 @@ const getAllData = async () => {
         orderBy: {
           createdAt: "desc",
         },
-      }),
-      prisma.product.findMany({
-        where: {
-          gender: "WOMEN",
-          status: "PUBLISHED",
-        },
-        select: {
-          id: true,
-          name: true,
-          images: true,
-          finalPrice: true,
-          originalPrice: true,
-          variants: {
-            select: {
-              color: true,
-            },
-            distinct: ["color"],
-          },
-        },
-        take: 16,
-        orderBy: {
-          createdAt: "desc",
-        },
-      }).then(async (women) => {
-        // Fallback: if no women products, show all published products
-        if (women.length > 0) return women;
-        return prisma.product.findMany({
-          where: { status: "PUBLISHED" },
-          select: {
-            id: true,
-            name: true,
-            images: true,
-            finalPrice: true,
-            originalPrice: true,
-            variants: {
-              select: { color: true },
-              distinct: ["color"],
-            },
-          },
-          take: 16,
-          orderBy: { createdAt: "desc" },
-        });
       }),
     ]);
 
@@ -118,7 +75,6 @@ const getAllData = async () => {
     categoriesData,
     mainPageContent,
     menProducts,
-    womenProducts,
   };
 };
 
@@ -137,15 +93,14 @@ const defaultData = {
 };
 
 export default async function Page() {
-  const { categoriesData, mainPageContent, menProducts, womenProducts } =
+  const { categoriesData, mainPageContent, menProducts } =
     await getAllData();
 
   return (
     <div className="-mt-[136px]">
       <Hero data={mainPageContent ?? defaultData} />
 
-      {/* FOR HIM / FOR HER Tabs */}
-      <GenderTabs menProducts={menProducts} womenProducts={womenProducts} />
+      <GenderTabs menProducts={menProducts} />
 
       {/* Category Carousel */}
       <CategoriesSelection featuredProducts={categoriesData} />

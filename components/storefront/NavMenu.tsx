@@ -30,8 +30,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: "For Him",
-    href: "/collections/men",
+    label: "All Products",
+    href: "/collections/all-products",
     dropdown: {
       columns: [
         {
@@ -53,30 +53,6 @@ const navItems: NavItem[] = [
         src: "/men.jpeg",
         alt: "Men's Collection",
         caption: "MEN'S DROP",
-      },
-    },
-  },
-  {
-    label: "For Her",
-    href: "/collections/women",
-    dropdown: {
-      columns: [
-        {
-          heading: "Products",
-          links: [
-            { name: "T-Shirts", href: "/collections/t-shirts" },
-            { name: "Hoodies", href: "/collections/hoodies" },
-            { name: "Joggers", href: "/collections/joggers" },
-            { name: "Outerwear", href: "/collections/outerwear" },
-            { name: "Oversized", href: "/collections/oversized-tshirts" },
-            { name: "All Products", href: "/collections/all-products" },
-          ],
-        },
-      ],
-      image: {
-        src: "/all.jpeg",
-        alt: "Women's Collection",
-        caption: "WOMEN'S DROP",
       },
     },
   },

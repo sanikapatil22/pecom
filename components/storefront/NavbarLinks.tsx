@@ -21,11 +21,6 @@ export const navbarLinks = [
     href: "/products/men",
   },
   {
-    id: 3,
-    name: "Women",
-    href: "/products/women",
-  },
-  {
     id: 4,
     name: "Kids",
     href: "/products/kids",

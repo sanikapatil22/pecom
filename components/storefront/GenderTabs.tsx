@@ -39,7 +39,6 @@ interface GenderProduct {
 
 interface GenderTabsProps {
   menProducts: GenderProduct[];
-  womenProducts: GenderProduct[];
 }
 
 export type { GenderProduct };
@@ -147,52 +146,29 @@ export function ProductCard({ product }: { product: GenderProduct }) {
   );
 }
 
-export default function GenderTabs({ menProducts, womenProducts }: GenderTabsProps) {
-  const [activeTab, setActiveTab] = useState<"men" | "women">("men");
-
-  const products = activeTab === "men" ? menProducts : womenProducts;
-
+export default function GenderTabs({ menProducts }: GenderTabsProps) {
   return (
     <section className="py-16 md:py-20 bg-neutral-50">
-      {/* Tabs */}
-      <div className="flex items-center justify-center gap-8 mb-10">
-        <button
-          onClick={() => setActiveTab("men")}
-          className={`text-lg md:text-xl uppercase tracking-[0.2em] font-semibold pb-1 transition-colors ${
-            activeTab === "men"
-              ? "text-black border-b-2 border-black"
-              : "text-neutral-400 hover:text-neutral-600"
-          }`}
-        >
+      <div className="flex items-center justify-center mb-10">
+        <h2 className="text-lg md:text-xl uppercase tracking-[0.2em] font-semibold text-black border-b-2 border-black pb-1">
           For Him
-        </button>
-        <button
-          onClick={() => setActiveTab("women")}
-          className={`text-lg md:text-xl uppercase tracking-[0.2em] font-semibold pb-1 transition-colors ${
-            activeTab === "women"
-              ? "text-black border-b-2 border-black"
-              : "text-neutral-400 hover:text-neutral-600"
-          }`}
-        >
-          For Her
-        </button>
+        </h2>
       </div>
 
       {/* Products Grid — 4 columns */}
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-10">
-          {products.map((product) => (
+          {menProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
-        {/* ALL FOR HIM / ALL FOR HER button */}
         <div className="flex justify-center mt-14 mb-4">
           <Link
-            href={activeTab === "men" ? "/collections/men" : "/collections/women"}
+            href="/collections/men"
             className="relative overflow-hidden bg-black text-white text-sm uppercase tracking-[0.2em] font-semibold px-12 py-4 border border-black group/btn [&>span]:relative [&>span]:z-10 hover:text-black transition-colors duration-500 before:absolute before:inset-0 before:bg-white before:origin-left before:scale-x-0 hover:before:scale-x-100 before:transition-transform before:duration-500 before:ease-out"
           >
-            <span>{activeTab === "men" ? "All For Him" : "All For Her"}</span>
+            <span>All For Him</span>
           </Link>
         </div>
       </div>

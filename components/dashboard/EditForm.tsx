@@ -252,29 +252,6 @@ export function EditForm({ data }: iAppProps) {
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Gender</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a gender" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="MEN">Men</SelectItem>
-                        <SelectItem value="WOMEN">Women</SelectItem>
-                        <SelectItem value="KIDS">Kids</SelectItem>
-                        <SelectItem value="UNISEX">Unisex</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="category"
                 render={({ field }) => (
                   <FormItem>

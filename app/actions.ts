@@ -909,8 +909,6 @@ export async function getProducts(
     // Handle category filtering
     if (category === "men") {
       whereClause.gender = "MEN";
-    } else if (category === "women") {
-      whereClause.gender = "WOMEN";
     } else if (category === "t-shirts") {
       whereClause.OR = [
         { category: "T_SHIRTS" as Category },
@@ -991,8 +989,6 @@ export async function getProducts(
     let title = "All Products";
     if (category === "men") {
       title = "For Him";
-    } else if (category === "women") {
-      title = "For Her";
     } else if (category === "t-shirts") {
       title = "All T-Shirts";
     } else if (category !== "all-products") {

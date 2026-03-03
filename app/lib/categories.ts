@@ -4,21 +4,6 @@ export const GenderEnum = [
     title: "Men",
     name: "MEN",
   },
-  {
-    id: 1,
-    title: "Women",
-    name: "WOMEN",
-  },
-  {
-    id: 3,
-    title: "Kids",
-    name: "KIDS",
-  },
-  {
-    id: 4,
-    title: "Unisex",
-    name: "UNISEX"
-  }
 ];
 
 
