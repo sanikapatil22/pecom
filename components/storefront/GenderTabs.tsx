@@ -69,13 +69,13 @@ export function ProductCard({ product }: { product: GenderProduct }) {
       onMouseLeave={() => setHovered(false)}
     >
       {/* Image area — button lives outside Link so clicks don't navigate */}
-      <div className="relative w-full overflow-hidden bg-neutral-100" style={{ paddingTop: "133.33%" }}>
+      <div className="relative w-full overflow-hidden bg-neutral-100 aspect-[3/4]">
         <Link href={`/product/${product.id}`} className="absolute inset-0">
           <Image
             src={images[imageIndex]}
             alt={product.name}
             fill
-            className="object-cover"
+            className="object-cover object-top"
             sizes="(max-width: 640px) 50vw, 25vw"
           />
         </Link>
@@ -85,10 +85,10 @@ export function ProductCard({ product }: { product: GenderProduct }) {
           <button
             type="button"
             onClick={nextImage}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
             aria-label="Next image"
           >
-            <ChevronRight className="w-5 h-5 text-black" strokeWidth={2.5} />
+            <ChevronRight className="w-6 h-6 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" strokeWidth={2.5} />
           </button>
         )}
 
@@ -109,26 +109,25 @@ export function ProductCard({ product }: { product: GenderProduct }) {
 
       {/* Text info — clicking navigates to product */}
       <Link href={`/product/${product.id}`}>
-        <div className="mt-3 space-y-1.5">
-          <h3 className="text-xs uppercase tracking-[0.05em] font-medium text-neutral-800 line-clamp-1">
+        <div className="mt-3 space-y-1 text-center px-1">
+          <h3 className="text-[11px] uppercase tracking-[0.12em] font-semibold text-neutral-900 line-clamp-1">
             {product.name}
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">{formatPrice(product.finalPrice)}</span>
+          <div className="flex items-center justify-center gap-2 pt-0.5">
+            <span className="text-sm font-bold text-neutral-900">{formatPrice(product.finalPrice)}</span>
             {product.originalPrice > product.finalPrice && (
-              <span className="text-xs text-neutral-400 line-through">
+              <span className="text-xs text-neutral-400 line-through font-normal">
                 {formatPrice(product.originalPrice)}
               </span>
             )}
           </div>
 
-          {/* Color Swatches */}
           {uniqueColors.length > 0 && (
-            <div className="flex items-center gap-1.5 pt-0.5">
+            <div className="flex items-center justify-center gap-1.5 pt-1">
               {uniqueColors.map((color) => (
                 <span
                   key={color}
-                  className="w-4 h-4 rounded-sm border border-neutral-300"
+                  className="w-3.5 h-3.5 rounded-full border border-neutral-300 shadow-sm"
                   style={{
                     background:
                       color === "MULTICOLOR"
@@ -157,7 +156,7 @@ export default function GenderTabs({ menProducts }: GenderTabsProps) {
 
       {/* Products Grid — 4 columns */}
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-12">
           {menProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

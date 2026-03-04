@@ -59,7 +59,7 @@ export default function CategoriesPage({ params }: CategoryPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="font-semibold text-3xl">{title}</h1>
@@ -71,7 +71,7 @@ export default function CategoriesPage({ params }: CategoryPageProps) {
             <Loader2 className="h-8 w-8 animate-spin text-neutral-400" />
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-12 justify-center">
             {products.map((item) => (
               <ProductCard
                 key={item.id}

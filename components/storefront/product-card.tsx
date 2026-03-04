@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ChevronRight } from "lucide-react";
 
 interface ProductCardProps {
   id?: string;
@@ -45,7 +46,7 @@ export function ProductCard1({
   return (
     <Link href={`/product/${id}`} className="group block">
       <div
-        className="relative aspect-[3/4] overflow-hidden bg-neutral-100"
+        className="relative overflow-hidden bg-neutral-100 aspect-[3/4]"
         onMouseEnter={() => {
           if (images.length > 1) setCurrentImage(1);
         }}
@@ -60,34 +61,36 @@ export function ProductCard1({
           src={images[currentImage] || images[0]}
           alt={title}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           priority
         />
         {images.length > 1 && (
           <button
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 text-white text-xl leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               setCurrentImage((prev) => (prev + 1) % images.length);
             }}
+            aria-label="Next image"
           >
-            ›
+            <ChevronRight className="w-6 h-6 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" strokeWidth={2.5} />
           </button>
         )}
       </div>
-      <div className="mt-3 space-y-1">
-        <h3 className="text-xs uppercase tracking-[0.05em] font-medium text-neutral-800 line-clamp-1">
+      <div className="mt-3 space-y-1 text-center px-1">
+        <h3 className="text-[11px] uppercase tracking-[0.12em] font-semibold text-neutral-900 line-clamp-1">
           {title}
         </h3>
-        <p className="text-[10px] text-neutral-400 line-clamp-1 uppercase tracking-wider">{tagline}</p>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-sm font-medium">{formattedPrice}</span>
+        <p className="text-[10px] text-neutral-400 line-clamp-1 uppercase tracking-widest">{tagline}</p>
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-0.5">
+          <span className="text-sm font-bold text-neutral-900">{formattedPrice}</span>
           {formattedOriginalPrice !== formattedPrice && (
             <>
-              <span className="text-xs text-neutral-400 line-through">{formattedOriginalPrice}</span>
-              <span className="text-xs text-neutral-500">{discount}% off</span>
+              <span className="text-xs text-neutral-400 line-through font-normal">{formattedOriginalPrice}</span>
+              <span className="text-xs text-neutral-500 font-medium">{discount}% off</span>
             </>
           )}
         </div>
