@@ -45,7 +45,7 @@ export async function Navbar() {
             {/* Center — Brand Name */}
             <div className="flex justify-center">
               <Link href="/" className="flex-shrink-0">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-[0.35em] uppercase">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-[0.35em] uppercase">
                   PAMARA
                 </h1>
               </Link>

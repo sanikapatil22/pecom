@@ -63,6 +63,11 @@ const getAllData = async () => {
             },
             distinct: ["color"],
           },
+          reviews: {
+            select: {
+              rating: true,
+            },
+          },
         },
         take: 16,
         orderBy: {

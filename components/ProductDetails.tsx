@@ -279,27 +279,28 @@ export default function ProductDetails({ data }: iAppProps) {
         <div className="space-y-3">
           {/* Main Image */}
           <div className="relative w-full bg-neutral-100 overflow-hidden" style={{ paddingTop: "100%" }}>
-            <Image
-              src={data.images[currentImageIndex]}
-              alt={data.name}
-              fill
-              quality={95}
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              priority
-            />
+            {data.images.map((image, index) => (
+              <img
+                key={image}
+                src={image}
+                alt={data.name}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-150 ${index === currentImageIndex ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+              />
+            ))}
 
             {data.images.length > 1 && (
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center transition-colors z-10"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center transition-colors z-10"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -320,12 +321,11 @@ export default function ProductDetails({ data }: iAppProps) {
                     : "border-transparent hover:border-neutral-300"
                 )}
               >
-                <Image
+                <img
                   src={image}
                   alt={`${data.name} view ${index + 1}`}
-                  fill
-                  sizes="64px"
-                  className="object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
                 />
               </button>
             ))}
@@ -381,7 +381,7 @@ export default function ProductDetails({ data }: iAppProps) {
                     onClick={() => setSelectedColor(color)}
                     disabled={!isAvailable}
                     className={cn(
-                      "w-9 h-9 border-2 transition-all duration-200",
+                      "w-9 h-9 rounded-none border-2 transition-all duration-200",
                       selectedColor === color
                         ? "border-black scale-105"
                         : "border-neutral-200 hover:border-neutral-400",
@@ -570,16 +570,14 @@ export default function ProductDetails({ data }: iAppProps) {
 
           {/* Reviews */}
           <div className="mt-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs uppercase tracking-[0.15em] font-medium">
-                Reviews ({data.reviews.length})
-              </h3>
-              <ReviewDialog
-                productId={data.id}
-                isOpen={isOpen}
-                onClose={() => setIsOpen(!isOpen)}
-              />
-            </div>
+            <ReviewDialog
+              productId={data.id}
+              isOpen={isOpen}
+              onClose={() => setIsOpen(!isOpen)}
+            />
+            <h3 className="text-xs uppercase tracking-[0.15em] font-medium mt-4 mb-4">
+              Reviews ({data.reviews.length})
+            </h3>
 
             <div className="space-y-4">
               {displayedReviews.map((review) => (

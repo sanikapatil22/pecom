@@ -82,6 +82,7 @@ export default function CategoriesPage({ params }: CategoryPageProps) {
                   finalPrice: item.finalPrice,
                   originalPrice: item.originalPrice,
                   variants: item.variants,
+                  reviews: item.reviews.map((r) => ({ rating: r.rating })),
                 }}
               />
             ))}

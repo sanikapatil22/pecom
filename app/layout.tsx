@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={nunitoSans.className} style={{ color: "#1C1C1C", fontSize: "15px", backgroundColor: "#F5F5F5" }}>
+    <html lang="en" className={GeistMono.variable}>
+      <body className={GeistMono.className} style={{ color: "#1C1C1C", fontSize: "15px", backgroundColor: "#F5F5F5" }}>
         <NextTopLoader color="white" />
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Providers>{children}</Providers>

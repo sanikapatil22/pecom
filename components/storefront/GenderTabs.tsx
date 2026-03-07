@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Star } from "lucide-react";
 
 const colorMap: Record<string, string> = {
   BLACK: "#000000",
@@ -35,6 +35,7 @@ interface GenderProduct {
   finalPrice: number;
   originalPrice: number;
   variants: { color: string }[];
+  reviews?: { rating: number }[];
 }
 
 interface GenderTabsProps {
@@ -110,13 +111,13 @@ export function ProductCard({ product }: { product: GenderProduct }) {
       {/* Text info — clicking navigates to product */}
       <Link href={`/product/${product.id}`}>
         <div className="mt-3 space-y-1 text-center px-1">
-          <h3 className="text-[11px] uppercase tracking-[0.12em] font-semibold text-neutral-900 line-clamp-1">
+          <h3 className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-[0.18em] font-normal text-neutral-900 line-clamp-1">
             {product.name}
           </h3>
           <div className="flex items-center justify-center gap-2 pt-0.5">
-            <span className="text-sm font-bold text-neutral-900">{formatPrice(product.finalPrice)}</span>
+            <span className="font-[family-name:var(--font-geist-mono)] text-sm font-normal text-neutral-900">{formatPrice(product.finalPrice)}</span>
             {product.originalPrice > product.finalPrice && (
-              <span className="text-xs text-neutral-400 line-through font-normal">
+              <span className="font-[family-name:var(--font-geist-mono)] text-xs text-neutral-400 line-through font-normal">
                 {formatPrice(product.originalPrice)}
               </span>
             )}
@@ -127,7 +128,7 @@ export function ProductCard({ product }: { product: GenderProduct }) {
               {uniqueColors.map((color) => (
                 <span
                   key={color}
-                  className="w-3.5 h-3.5 rounded-full border border-neutral-300 shadow-sm"
+                  className="w-3.5 h-3.5 rounded-none border border-neutral-300"
                   style={{
                     background:
                       color === "MULTICOLOR"
@@ -139,6 +140,25 @@ export function ProductCard({ product }: { product: GenderProduct }) {
               ))}
             </div>
           )}
+
+          {(() => {
+            const reviews = product.reviews ?? [];
+            if (reviews.length === 0) return null;
+            const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+            const rounded = Math.round(avg);
+            return (
+              <div className="flex items-center justify-center gap-1 pt-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-4 h-4 ${star <= rounded ? "fill-black text-black" : "text-neutral-300"}`}
+                    strokeWidth={1}
+                  />
+                ))}
+                <span className="text-xs text-neutral-500 ml-1">({reviews.length})</span>
+              </div>
+            );
+          })()}
         </div>
       </Link>
     </div>
