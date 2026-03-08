@@ -31,7 +31,7 @@ import { Prisma } from "@prisma/client";
 import { useToast } from "@/hooks/use-toast";
 import ReviewDialog from "./ReviewDialog";
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
 import { buyNow } from "@/app/actions";
@@ -273,10 +273,10 @@ export default function ProductDetails({ data }: iAppProps) {
   );
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+    <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
         {/* Left: Images */}
-        <div className="space-y-3">
+        <div className="space-y-3 lg:sticky lg:top-[168px] lg:self-start">
           {/* Main Image */}
           <div className="relative w-full bg-neutral-100 overflow-hidden" style={{ paddingTop: "100%" }}>
             {data.images.map((image, index) => (
@@ -579,28 +579,32 @@ export default function ProductDetails({ data }: iAppProps) {
               Reviews ({data.reviews.length})
             </h3>
 
-            <div className="space-y-4">
+            <div className="space-y-0">
               {displayedReviews.map((review) => (
-                <div key={review.id} className="border-b border-neutral-100 pb-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3 flex-1">
-                      <Avatar className="h-7 w-7">
+                <div key={review.id} className="border-b border-neutral-100 py-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2.5 flex-1">
+                      <Avatar className="h-8 w-8 flex-shrink-0">
                         <AvatarImage
-                          src={review.user.profileImage}
+                          src={review.user.profileImage ?? undefined}
                           alt={`${review.user.firstName || "Anonymous"}'s profile`}
                         />
+                        <AvatarFallback className="text-[11px] font-medium bg-neutral-200 text-neutral-700">
+                          {(review.user.firstName?.[0] ?? "A").toUpperCase()}
+                          {(review.user.lastName?.[0] ?? "").toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-sm font-medium">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold uppercase tracking-wide">
                             {review.user.firstName || "Anonymous"}{" "}
                             {review.user.lastName || ""}
                           </span>
-                          <span className="text-xs text-neutral-400">
+                          <span className="text-[11px] text-neutral-400">
                             {new Date(review.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-sm text-neutral-600 mt-1">
+                        <p className="text-xs text-neutral-600 mt-0.5">
                           {review.comment}
                         </p>
                       </div>
